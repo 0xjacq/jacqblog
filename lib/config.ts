@@ -3,7 +3,7 @@ export const siteConfig = {
   title: "jacq's blog",
   description:
     "Articles, projects, and book notes from jacq — a passionate creator building applications and sharing knowledge.",
-  url: "https://jacq.dev",
+  url: "https://jacqblog.vercel.app",
   author: "jacq",
   links: {
     twitter: "https://twitter.com/jacq",
