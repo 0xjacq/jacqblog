@@ -1,0 +1,74 @@
+---
+title: "Building a Minimal Blog with Next.js and MDX"
+date: "2024-01-20"
+description: "A deep dive into creating a fast, minimalist blog using Next.js 14, MDX, and Tailwind CSS."
+tags: ["nextjs", "react", "mdx", "tutorial"]
+published: true
+---
+
+Building a personal blog doesn't have to be complicated. In fact, the simpler the better. In this article, I'll walk through the key decisions and implementation details behind this very blog.
+
+## Why Next.js + MDX?
+
+The combination of Next.js and MDX offers several compelling benefits:
+
+1. **Static Generation** — Pages are pre-rendered at build time for lightning-fast loading
+2. **React Components in Markdown** — MDX lets you embed interactive React components
+3. **File-based Content** — No database or CMS needed, just markdown files in your repo
+4. **Excellent Developer Experience** — Hot reload, TypeScript support, and great tooling
+
+## The Tech Stack
+
+Here's what powers this blog:
+
+- **Next.js 14** with App Router
+- **MDX** via `next-mdx-remote`
+- **Tailwind CSS** for styling
+- **Vercel** for deployment
+
+## Project Structure
+
+The content lives in a `content/` directory with subdirectories for each content type:
+
+```
+content/
+├── articles/
+│   └── *.mdx
+├── projects/
+│   └── *.mdx
+└── books/
+    └── *.mdx
+```
+
+Each MDX file has frontmatter that defines metadata like title, date, and tags.
+
+## Key Features
+
+### Reading Time
+
+The reading time is calculated using the `reading-time` package:
+
+```typescript
+import readingTime from 'reading-time';
+
+const stats = readingTime(content);
+// stats.text = "5 min read"
+```
+
+### RSS Feed
+
+RSS is generated dynamically using a route handler at `/rss.xml`. This allows readers to subscribe to updates using their favorite RSS reader.
+
+### Dark Mode
+
+The blog uses a dark theme by default, with carefully chosen colors for readability:
+
+- Background: `#0a0a0a`
+- Text: `#e5e5e5`
+- Accent: `#3b82f6`
+
+## Conclusion
+
+Building a minimal blog is a great exercise in restraint. Instead of adding every feature imaginable, focus on what matters: the content and the reading experience.
+
+The full source code is available on GitHub. Feel free to use it as a starting point for your own blog.
