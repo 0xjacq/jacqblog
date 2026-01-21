@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const bookEntries = books.map((book) => ({
     url: `${siteConfig.url}/books/${book.slug}`,
-    lastModified: new Date(book.frontmatter.dateRead),
+    lastModified: new Date(),
     changeFrequency: "yearly" as const,
     priority: 0.5,
   }));

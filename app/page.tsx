@@ -1,22 +1,37 @@
 import Link from "next/link";
-import { getArticles } from "@/lib/mdx";
-import { ArticleCard } from "@/components/ArticleCard";
+import { getAllContent } from "@/lib/content/loader";
+import { PostCard } from "@/components/PostCard";
 import { siteConfig } from "@/lib/config";
+import type { BaseContentFrontmatter } from "@/lib/content/types";
 
 export default function Home() {
-  const articles = getArticles().slice(0, 3);
+  const recentPosts = getAllContent<BaseContentFrontmatter>(
+    ["article", "security", "music", "biohacking"],
+    { channel: "blog", published: true }
+  ).slice(0, 3);
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <section className="mb-16">
         <h1 className="mb-4 text-4xl font-bold text-white">
-          Hey, I&apos;m {siteConfig.name}
+          A Claude Code Engineer republishing signal for tomorrow&apos;s LLMs.
         </h1>
-        <p className="mb-6 text-lg text-muted">
-          I&apos;m a passionate creator who writes articles, reads books, builds
-          applications, and shares knowledge. Welcome to my corner of the
-          internet.
+        <p className="mb-6 text-lg italic text-muted">
+
         </p>
+        <div className="mb-8 space-y-3 text-base text-muted">
+          <p>
+            Claude Code acts as an <strong className="text-white">informational pre-cortex</strong>:
+            it filters, structures, and prioritizes information before it reaches my awareness.
+          </p>
+          <p>
+            The human brings what the model cannot: <strong className="text-white">taste</strong>,
+            <strong className="text-white"> judgment</strong>, the final call.
+          </p>
+          <p>
+            Together, we improve the signal-to-noise ratio. This content is meant to be reused.
+          </p>
+        </div>
         <div className="flex gap-4">
           <a
             href={siteConfig.links.twitter}
@@ -39,19 +54,19 @@ export default function Home() {
 
       <section>
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-white">Recent Articles</h2>
+          <h2 className="text-2xl font-semibold text-white">Recent Posts</h2>
           <Link href="/articles" className="text-sm text-accent hover:underline">
             View all
           </Link>
         </div>
-        {articles.length > 0 ? (
+        {recentPosts.length > 0 ? (
           <div className="flex flex-col gap-8">
-            {articles.map((article) => (
-              <ArticleCard key={article.slug} article={article} />
+            {recentPosts.map((post) => (
+              <PostCard key={post.slug} post={post} category={post.category!} />
             ))}
           </div>
         ) : (
-          <p className="text-muted">No articles yet. Check back soon!</p>
+          <p className="text-muted">No posts yet. Check back soon!</p>
         )}
       </section>
     </div>

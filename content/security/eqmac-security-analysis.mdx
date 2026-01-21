@@ -1,0 +1,416 @@
+---
+title: "Anatomy of a macOS Software Protection: eqMac Case Study"
+date: "2026-01-21"
+description: "Educational analysis of macOS application protection mechanisms and security research methodology."
+tags: ["reverse-engineering", "macos", "security-research", "binary-analysis"]
+published: true
+contentType: deep-dive
+channels:
+  blog: { enabled: true, format: "full" }
+---
+
+# Anatomy of a macOS Software Protection: eqMac Case Study
+
+## Introduction
+
+Security research on macOS presents unique challenges. Unlike Windows or Linux, Apple's ecosystem combines system-level protections (Gatekeeper, SIP, notarization) with specific development conventions that directly influence application architecture.
+
+This article documents an educational analysis of **eqMac**, a system-wide audio equalizer for macOS. The application follows a freemium model with paid Pro features, making it an interesting case study for understanding client-side license system implementation.
+
+### Learning Objectives
+
+- Understand the structure of a modern macOS bundle
+- Master static and dynamic analysis tools
+- Identify license validation patterns
+- Evaluate the attack surface of software protection
+
+**What this article is NOT**: a cracking tutorial. No functional code for bypassing protections is provided.
+
+---
+
+## Disclaimer
+
+The analysis presented here was performed on a legitimately acquired personal copy, for strictly educational purposes. No functional circumvention tool is provided. The goal is to document analysis techniques, not to facilitate piracy.
+
+---
+
+## Anatomy of a macOS Application
+
+### The .app Bundle Structure
+
+A macOS application isn't a simple executable — it's a *bundle*, a structured directory with the `.app` extension. Here's eqMac's structure:
+
+```
+eqMac.app/
+├── Contents/
+│   ├── Info.plist                    # Application metadata
+│   ├── MacOS/
+│   │   └── eqMac                     # Main binary (Mach-O)
+│   ├── Resources/
+│   │   └── Embedded/
+│   │       ├── ui.zip                # Angular UI (bundled)
+│   │       └── com.bitgapp.eqmac.helper/
+│   │           └── Contents/MacOS/
+│   │               └── com.bitgapp.eqmac.helper  # Privileged helper
+│   ├── Frameworks/                   # Dependencies (Sparkle, Sentry...)
+│   └── _CodeSignature/
+│       └── CodeResources             # Code signature
+```
+
+**Inspection commands:**
+
+```bash
+# List bundle structure
+ls -la eqMac.app/Contents/
+
+# Examine metadata
+plutil -p eqMac.app/Contents/Info.plist
+
+# Identify binary type
+file eqMac.app/Contents/MacOS/eqMac
+# Output: Mach-O universal binary with 2 architectures:
+#         x86_64, arm64
+```
+
+### Code Signing and Notarization
+
+Apple requires code signing for all distributed applications. Verification reveals valuable information:
+
+```bash
+# Detailed signature verification
+codesign -dv --verbose=4 eqMac.app
+
+# Recursive integrity verification
+codesign --verify --deep --strict eqMac.app
+
+# Check notarization
+spctl -a -t exec -vv eqMac.app
+```
+
+**Key points:**
+- **Team ID**: Identifies the developer (Apple Developer certificate)
+- **Ad-hoc signature**: Local signature without certificate, easily modifiable
+- **Hardened Runtime**: Additional protections (can be disabled by patching)
+
+### Application Components
+
+**1. Main binary** (`eqMac`)
+- Universal binary: x86_64 + ARM64
+- Swift/Objective-C with partially stripped symbols
+- Handles audio processing via Core Audio
+
+**2. User interface** (`ui.zip`)
+- Minified Angular application
+- Main bundle: ~8 MB of JavaScript
+- Communicates with binary via IPC
+
+**3. Privileged helper** (`com.bitgapp.eqmac.helper`)
+- Separate process for root operations
+- Installed via SMJobBless
+- Manages system audio modifications
+
+---
+
+## Analysis Methodology
+
+### Static Analysis
+
+Static analysis examines code without executing the application.
+
+#### Dependency Inspection
+
+```bash
+# List dynamic libraries
+otool -L eqMac.app/Contents/MacOS/eqMac
+
+# Partial output:
+#   /System/Library/Frameworks/CoreAudio.framework/...
+#   /System/Library/Frameworks/Security.framework/...
+#   @rpath/Sparkle.framework/...
+#   @rpath/Sentry.framework/...
+```
+
+The presence of **Sparkle** (auto-update) and **Sentry** (crash reporting) is typical of modern macOS applications.
+
+#### Searching for Revealing Strings
+
+```bash
+# Extract strings from binary
+strings eqMac.app/Contents/MacOS/eqMac | wc -l
+# ~15000 strings
+
+# Filter license-related strings
+strings eqMac.app/Contents/MacOS/eqMac | grep -iE "(license|trial|valid|expire)"
+```
+
+This search often reveals:
+- Exploitable error messages
+- Leaked source paths (Swift includes paths in metadata)
+- Non-stripped function names
+
+#### Symbol Analysis
+
+```bash
+# List exported symbols (if not stripped)
+nm -U eqMac.app/Contents/MacOS/eqMac | grep -i license
+
+# For Swift binaries, search metadata
+nm -arch arm64 eqMac.app/Contents/MacOS/eqMac | grep "T _\$s"
+```
+
+### Advanced Binary Analysis (Ghidra)
+
+Ghidra enables in-depth binary analysis.
+
+#### CFG Navigation
+
+The Control Flow Graph visualizes execution flow. For a validation function:
+
+1. **Entry block**: Parameter preparation
+2. **API calls**: License data retrieval
+3. **Comparisons**: Value verification
+4. **Branches**: Valid/invalid decision
+5. **Exit blocks**: Result return
+
+Points of interest are **conditional branch instructions** following a comparison:
+
+```asm
+; Conceptual pseudo-assembly
+cmp    eax, 0x1        ; Compare validation result
+je     valid_license   ; Jump if Equal → valid license
+jmp    invalid_license ; Otherwise → invalid
+```
+
+#### Swift Decompilation
+
+Swift generates verbose code with recognizable patterns:
+
+- **Optional unwrapping**: Cascading nil checks
+- **Enum matching**: Switch on license states
+- **Protocol witnesses**: Virtual function tables
+
+Decompilation produces readable but noisy pseudo-code due to Swift runtime calls.
+
+### Dynamic Analysis
+
+Dynamic analysis observes the running application.
+
+#### Filesystem Monitoring
+
+```bash
+# Monitor all file accesses by the application
+sudo fs_usage -w -f filesystem eqMac 2>&1 | grep -v CACHE
+
+# Typical results:
+# open    ~/Library/Preferences/com.bitgapp.eqmac.plist
+# open    ~/Library/Application Support/eqMac/...
+# stat    ~/Library/Keychains/...
+```
+
+#### System Tracing
+
+```bash
+# Trace system calls (requires SIP disabled)
+sudo dtruss -p <PID> 2>&1 | grep -E "(open|stat|read)"
+
+# With dtrace (more flexible)
+sudo dtrace -n 'syscall::open*:entry /execname == "eqMac"/ { printf("%s", copyinstr(arg0)); }'
+```
+
+#### Debugging with lldb
+
+```bash
+# Attach to running process
+lldb -p $(pgrep eqMac)
+
+# Or launch with debugger
+lldb eqMac.app/Contents/MacOS/eqMac
+
+# Find license-related functions
+(lldb) image lookup -rn "License"
+(lldb) image lookup -rn "Trial"
+
+# Set regex breakpoint
+(lldb) br set -r ".*validateLicense.*"
+(lldb) br set -r ".*checkTrial.*"
+
+# Continue execution
+(lldb) continue
+```
+
+#### Network Interception
+
+```bash
+# With mitmproxy (requires CA certificate installation)
+mitmproxy -p 8080
+
+# Configure system proxy or use proxychains
+export https_proxy=http://127.0.0.1:8080
+```
+
+**Note**: The application may implement certificate pinning, requiring additional bypass.
+
+#### Instrumentation with Frida
+
+Frida allows JavaScript injection into the target process:
+
+```python
+# Conceptual example - not functional as-is
+import frida
+
+js_code = '''
+// Hook a Swift function
+Interceptor.attach(ptr("0x..."), {
+    onEnter: function(args) {
+        console.log("Function called");
+    },
+    onLeave: function(retval) {
+        console.log("Return: " + retval);
+    }
+});
+'''
+
+session = frida.attach("eqMac")
+script = session.create_script(js_code)
+script.load()
+```
+
+---
+
+## Identified Attack Surface
+
+The analysis reveals several potential vectors.
+
+### Local Storage
+
+**UserDefaults / Plists**
+```
+~/Library/Preferences/com.bitgapp.eqmac.plist
+```
+Stores user preferences. May contain trial data.
+
+**Application Support**
+```
+~/Library/Application Support/eqMac/
+```
+Persistent application data.
+
+**Keychain**
+Sensitive information (tokens, keys) may be stored in macOS Keychain.
+
+### Network Communications
+
+The application communicates with several endpoints:
+
+```
+api.eqmac.app       → Main API (license, trial)
+update.eqmac.app    → Updates (Sparkle)
+```
+
+**Potential vulnerabilities:**
+- Lack of certificate pinning
+- Unsigned API responses
+- Client-side only validation
+
+### Binary Validation
+
+**Weak code signing**
+- Ad-hoc signature: no Apple verification
+- No strict hardened runtime
+- Binary modifiable after signature removal
+
+**Client-side logic**
+- All license checks are in the binary
+- No mandatory server validation
+- Decision points identifiable in CFG
+
+### License Files
+
+The application supports `.eqm` files for lifetime licenses:
+
+- Declared in `Info.plist` as document type
+- Probably contains: serial hash, machine hash, expiration
+- Format and validation to be reversed
+
+---
+
+## Lessons for Developers
+
+This analysis highlights the weaknesses of client-side protection.
+
+### Security Recommendations
+
+**1. Server-side validation**
+```
+Client → Server : Session token
+Server → Client : Signed response (JWT, etc.)
+Client : Verify signature with embedded public key
+```
+
+**2. Certificate Pinning**
+```swift
+// Verify server certificate
+func urlSession(_ session: URLSession,
+                didReceive challenge: URLAuthenticationChallenge,
+                completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    // Compare with expected certificate
+}
+```
+
+**3. Robust Code Signing**
+- Sign with Developer ID certificate (Team ID)
+- Enable Hardened Runtime
+- Submit for Apple notarization
+
+**4. Obfuscation and Anti-tampering**
+- Obfuscate sensitive strings
+- Verify binary integrity at runtime
+- Detect attached debuggers
+
+**5. Integrity Checks**
+```swift
+// Verify signature at runtime
+func verifyCodeSignature() -> Bool {
+    var staticCode: SecStaticCode?
+    let status = SecStaticCodeCreateWithPath(
+        Bundle.main.bundleURL as CFURL,
+        [], &staticCode)
+    // Validate against expected requirements
+}
+```
+
+### Why Client-side DRM Always Fails
+
+Fundamentally, if validation code runs on the user's machine:
+- The user has full access to the binary
+- Any branch can be modified
+- Any comparison can be forced
+
+**The only robust model**: move business logic to the server. The client application should only be an interface to server-side functionality.
+
+---
+
+## Conclusion
+
+This eqMac analysis illustrates standard reverse engineering techniques on macOS:
+
+1. **Bundle inspection** to understand architecture
+2. **Static analysis** with specialized tools (Ghidra, strings, otool)
+3. **Dynamic analysis** via debugging and monitoring
+4. **Attack vector identification**
+
+Client-side software protections are fundamentally bypassable. For developers, the lesson is clear: never trust the client for authorization, only for authentication.
+
+### Responsible Disclosure
+
+Responsible security research involves:
+- Documenting vulnerabilities constructively
+- Contacting developers before publication (if applicable)
+- Not providing functional exploitation tools
+- Contributing to overall security improvement
+
+The goal isn't to "crack" applications, but to understand protection mechanisms to better design our own — or to evaluate risks on systems we manage.
+
+---
+
+*Article written for educational purposes. The author does not encourage software piracy.*

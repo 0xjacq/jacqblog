@@ -1,24 +1,33 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import readingTime from "reading-time";
+import {
+  getContent,
+  getContentBySlug,
+  getTagsForCategory,
+} from "./content/loader";
+import type {
+  ArticleFrontmatter,
+  UpdateFrontmatter,
+  Article,
+  Update,
+  Channel,
+  BaseContentFrontmatter,
+} from "./content/types";
+
+// Re-export types for backward compatibility
+export type {
+  ArticleFrontmatter,
+  Article,
+  UpdateFrontmatter,
+  Update,
+} from "./content/types";
 
 const contentDirectory = path.join(process.cwd(), "content");
 
-export interface ArticleFrontmatter {
-  title: string;
-  date: string;
-  description: string;
-  tags: string[];
-  published: boolean;
-}
-
-export interface Article {
-  slug: string;
-  frontmatter: ArticleFrontmatter;
-  content: string;
-  readingTime: string;
-}
+// ============================================
+// Project and Book types (kept for compatibility)
+// ============================================
 
 export interface ProjectFrontmatter {
   title: string;
@@ -39,7 +48,7 @@ export interface BookFrontmatter {
   title: string;
   author: string;
   rating: number;
-  dateRead: string;
+  dateRead?: string;
   cover?: string;
 }
 
@@ -48,6 +57,10 @@ export interface Book {
   frontmatter: BookFrontmatter;
   content: string;
 }
+
+// ============================================
+// Helper functions
+// ============================================
 
 function getMDXFiles(dir: string): string[] {
   if (!fs.existsSync(dir)) {
@@ -65,37 +78,47 @@ function readMDXFile<T>(filePath: string): { frontmatter: T; content: string } {
   };
 }
 
+// ============================================
+// Articles (using new loader with backward compatibility)
+// ============================================
+
 export function getArticles(): Article[] {
-  const articlesDir = path.join(contentDirectory, "articles");
-  const files = getMDXFiles(articlesDir);
-
-  const articles = files.map((file) => {
-    const slug = file.replace(".mdx", "");
-    const filePath = path.join(articlesDir, file);
-    const { frontmatter, content } = readMDXFile<ArticleFrontmatter>(filePath);
-    const stats = readingTime(content);
-
-    return {
-      slug,
-      frontmatter,
-      content,
-      readingTime: stats.text,
-    };
-  });
-
-  return articles
-    .filter((article) => article.frontmatter.published)
-    .sort(
-      (a, b) =>
-        new Date(b.frontmatter.date).getTime() -
-        new Date(a.frontmatter.date).getTime()
-    );
+  return getContent<ArticleFrontmatter>("article", {
+    channel: "blog",
+    published: true,
+  }) as Article[];
 }
 
 export function getArticle(slug: string): Article | undefined {
-  const articles = getArticles();
-  return articles.find((article) => article.slug === slug);
+  const article = getContentBySlug<ArticleFrontmatter>("article", slug);
+  if (!article || !article.frontmatter.published) {
+    return undefined;
+  }
+  return article as Article;
 }
+
+// ============================================
+// Updates (new)
+// ============================================
+
+export function getUpdates(channel?: Channel): Update[] {
+  return getContent<UpdateFrontmatter>("update", {
+    channel,
+    published: true,
+  }) as Update[];
+}
+
+export function getUpdate(slug: string): Update | undefined {
+  const update = getContentBySlug<UpdateFrontmatter>("update", slug);
+  if (!update || !update.frontmatter.published) {
+    return undefined;
+  }
+  return update as Update;
+}
+
+// ============================================
+// Projects (keeping original implementation for full compatibility)
+// ============================================
 
 export function getProjects(): Project[] {
   const projectsDir = path.join(contentDirectory, "projects");
@@ -125,6 +148,10 @@ export function getProject(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);
 }
 
+// ============================================
+// Books (keeping original implementation for full compatibility)
+// ============================================
+
 export function getBooks(): Book[] {
   const booksDir = path.join(contentDirectory, "books");
   const files = getMDXFiles(booksDir);
@@ -141,11 +168,13 @@ export function getBooks(): Book[] {
     };
   });
 
-  return books.sort(
-    (a, b) =>
-      new Date(b.frontmatter.dateRead).getTime() -
-      new Date(a.frontmatter.dateRead).getTime()
-  );
+  return books.sort((a, b) => {
+    // Sort by rating (highest first), then alphabetically by title
+    if (b.frontmatter.rating !== a.frontmatter.rating) {
+      return b.frontmatter.rating - a.frontmatter.rating;
+    }
+    return a.frontmatter.title.localeCompare(b.frontmatter.title);
+  });
 }
 
 export function getBook(slug: string): Book | undefined {
@@ -153,11 +182,70 @@ export function getBook(slug: string): Book | undefined {
   return books.find((book) => book.slug === slug);
 }
 
+// ============================================
+// Tags
+// ============================================
+
 export function getAllTags(): string[] {
-  const articles = getArticles();
-  const tags = new Set<string>();
-  articles.forEach((article) => {
-    article.frontmatter.tags.forEach((tag) => tags.add(tag));
+  return getTagsForCategory("article");
+}
+
+export function getUpdateTags(): string[] {
+  return getTagsForCategory("update");
+}
+
+// ============================================
+// Thematic Categories (Music, Biohacking, Security)
+// ============================================
+
+export interface ThematicContent {
+  slug: string;
+  frontmatter: BaseContentFrontmatter;
+  content: string;
+  readingTime?: string;
+}
+
+export function getMusicContent(): ThematicContent[] {
+  return getContent<BaseContentFrontmatter>("music", {
+    channel: "blog",
+    published: true,
   });
-  return Array.from(tags).sort();
+}
+
+export function getMusicPost(slug: string): ThematicContent | undefined {
+  const post = getContentBySlug<BaseContentFrontmatter>("music", slug);
+  if (!post || !post.frontmatter.published) {
+    return undefined;
+  }
+  return post;
+}
+
+export function getBiohackingContent(): ThematicContent[] {
+  return getContent<BaseContentFrontmatter>("biohacking", {
+    channel: "blog",
+    published: true,
+  });
+}
+
+export function getBiohackingPost(slug: string): ThematicContent | undefined {
+  const post = getContentBySlug<BaseContentFrontmatter>("biohacking", slug);
+  if (!post || !post.frontmatter.published) {
+    return undefined;
+  }
+  return post;
+}
+
+export function getSecurityContent(): ThematicContent[] {
+  return getContent<BaseContentFrontmatter>("security", {
+    channel: "blog",
+    published: true,
+  });
+}
+
+export function getSecurityPost(slug: string): ThematicContent | undefined {
+  const post = getContentBySlug<BaseContentFrontmatter>("security", slug);
+  if (!post || !post.frontmatter.published) {
+    return undefined;
+  }
+  return post;
 }

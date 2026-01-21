@@ -1,6 +1,7 @@
-import { getArticles } from "@/lib/mdx";
-import { ArticleCard } from "@/components/ArticleCard";
+import { getAllContent } from "@/lib/content/loader";
+import { PostCard } from "@/components/PostCard";
 import type { Metadata } from "next";
+import type { BaseContentFrontmatter } from "@/lib/content/types";
 
 export const metadata: Metadata = {
   title: "Articles",
@@ -8,7 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function ArticlesPage() {
-  const articles = getArticles();
+  const posts = getAllContent<BaseContentFrontmatter>(
+    ["article", "security", "music", "biohacking"],
+    { channel: "blog", published: true }
+  );
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
@@ -17,10 +21,10 @@ export default function ArticlesPage() {
         Thoughts on software development, technology, and things I find
         interesting.
       </p>
-      {articles.length > 0 ? (
+      {posts.length > 0 ? (
         <div className="flex flex-col gap-8">
-          {articles.map((article) => (
-            <ArticleCard key={article.slug} article={article} />
+          {posts.map((post) => (
+            <PostCard key={post.slug} post={post} category={post.category!} />
           ))}
         </div>
       ) : (

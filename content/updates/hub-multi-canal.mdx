@@ -1,0 +1,44 @@
+---
+title: "Launching the Multi-Channel Hub"
+date: "2026-01-21"
+description: "New content distribution system across multiple channels."
+contentType: "build-in-public"
+tags: ["meta", "infrastructure", "blog"]
+published: true
+channels:
+  blog:
+    enabled: true
+    format: "micro"
+    publishedAt: "2026-01-21T00:00:00Z"
+  twitter:
+    enabled: true
+    format: "single"
+---
+
+Big update on jacqblog: content can now be distributed across multiple channels.
+
+## What's New
+
+- **New Updates section** — For micro-posts and build-in-public content
+- **Per-channel configuration** — Each piece of content can target blog, Twitter, or both
+- **Content types** — Tutorial, deep-dive, quick-tip, build-in-public...
+
+## Architecture
+
+The new system uses a generic loader that filters content by channel. Each MDX file can now specify its channels in the frontmatter:
+
+```yaml
+channels:
+  blog:
+    enabled: true
+    format: "micro"
+  twitter:
+    enabled: true
+    format: "thread"
+```
+
+## Next Steps
+
+- LinkedIn integration
+- Automatic newsletter generation
+- Per-channel analytics
