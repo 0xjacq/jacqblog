@@ -221,9 +221,24 @@ export function getMusicPost(slug: string): ThematicContent | undefined {
 }
 
 export function getBiohackingContent(): ThematicContent[] {
-  return getContent<BaseContentFrontmatter>("biohacking", {
+  // Get content from biohacking directory
+  const biohackingContent = getContent<BaseContentFrontmatter>("biohacking", {
     channel: "blog",
     published: true,
+  });
+
+  // Get content from ideas directory with biohacking tag
+  const ideasContent = getContent<BaseContentFrontmatter>("idea", {
+    channel: "blog",
+    published: true,
+  }).filter((item) => item.frontmatter.tags?.includes("biohacking"));
+
+  // Combine and sort by date (newest first)
+  const combined = [...biohackingContent, ...ideasContent];
+  return combined.sort((a, b) => {
+    const dateA = new Date(a.frontmatter.date).getTime();
+    const dateB = new Date(b.frontmatter.date).getTime();
+    return dateB - dateA;
   });
 }
 
