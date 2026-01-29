@@ -6,7 +6,7 @@ import type { BaseContentFrontmatter } from "@/lib/content/types";
 
 export default function Home() {
   const recentPosts = getAllContent<BaseContentFrontmatter>(
-    ["article", "security", "music", "biohacking"],
+    ["article", "security", "music", "biohacking", "ideas"],
     { channel: "blog", published: true }
   ).slice(0, 3);
 
