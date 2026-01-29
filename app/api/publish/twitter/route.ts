@@ -112,7 +112,6 @@ async function updateFrontmatterWithTweetId(
     article: "articles",
     project: "projects",
     book: "books",
-    update: "updates",
     music: "music",
     biohacking: "biohacking",
     security: "security",

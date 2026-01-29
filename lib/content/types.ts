@@ -1,6 +1,6 @@
 // Channel types
 export type Channel = "blog" | "twitter";
-export type ContentCategory = "article" | "project" | "book" | "update" | "music" | "biohacking" | "security" | "idea";
+export type ContentCategory = "article" | "project" | "book" | "music" | "biohacking" | "security" | "idea";
 export type ContentType =
   | "tutorial"
   | "deep-dive"
@@ -45,11 +45,6 @@ export interface BaseContentFrontmatter {
 // Article-specific frontmatter
 export type ArticleFrontmatter = BaseContentFrontmatter;
 
-// Update-specific frontmatter (micro-posts)
-export interface UpdateFrontmatter extends BaseContentFrontmatter {
-  contentType: ContentType; // Required for updates
-}
-
 // Project frontmatter (different structure)
 export interface ProjectFrontmatter {
   title: string;
@@ -83,7 +78,6 @@ export interface Content<T> {
 
 // Content type aliases
 export type Article = Content<ArticleFrontmatter> & { readingTime: string };
-export type Update = Content<UpdateFrontmatter> & { readingTime: string };
 export type Project = Content<ProjectFrontmatter>;
 export type Book = Content<BookFrontmatter>;
 

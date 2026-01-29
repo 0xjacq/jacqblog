@@ -16,7 +16,6 @@ const categoryPaths: Record<ContentCategory, string> = {
   security: "security",
   music: "music",
   biohacking: "biohacking",
-  update: "updates",
   project: "projects",
   book: "books",
   idea: "ideas",

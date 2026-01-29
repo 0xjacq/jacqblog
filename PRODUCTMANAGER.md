@@ -1,0 +1,4 @@
+- [ ] Article sur perpetuator (comment j'ai crée un bot de MM qui me rapport 80+ APR en 3 jours utilisant claude code)
+- [ ] Article sur multi task merci mom leverage starcraft 2
+- [ ] Ajout skills marketing et usage (cory91)
+- [ ] Ajout mes propres skills à partir des posts qui on RE l'algo twitter, et d'autres exemples/ressources à feed

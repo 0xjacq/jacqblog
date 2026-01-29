@@ -17,7 +17,6 @@ const categoryDirs: Record<ContentCategory, string> = {
   article: "articles",
   project: "projects",
   book: "books",
-  update: "updates",
   music: "music",
   biohacking: "biohacking",
   security: "security",

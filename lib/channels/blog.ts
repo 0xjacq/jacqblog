@@ -1,4 +1,4 @@
-import type { Article, Update, BaseContentFrontmatter } from "../content/types";
+import type { Article, BaseContentFrontmatter } from "../content/types";
 import { siteConfig } from "../config";
 
 /**
@@ -6,11 +6,10 @@ import { siteConfig } from "../config";
  */
 export function getContentUrl(
   slug: string,
-  type: "article" | "update" | "project" | "book"
+  type: "article" | "project" | "book"
 ): string {
   const paths: Record<string, string> = {
     article: "articles",
-    update: "updates",
     project: "projects",
     book: "books",
   };
@@ -57,8 +56,8 @@ export function generateExcerpt(content: string, maxLength = 160): string {
  * Generate structured data (JSON-LD) for an article
  */
 export function generateArticleSchema(
-  article: Article | Update,
-  type: "article" | "update"
+  article: Article,
+  type: "article"
 ): object {
   const url = getContentUrl(article.slug, type);
 

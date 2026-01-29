@@ -8,9 +8,7 @@ import {
 } from "./content/loader";
 import type {
   ArticleFrontmatter,
-  UpdateFrontmatter,
   Article,
-  Update,
   Channel,
   BaseContentFrontmatter,
 } from "./content/types";
@@ -19,8 +17,6 @@ import type {
 export type {
   ArticleFrontmatter,
   Article,
-  UpdateFrontmatter,
-  Update,
 } from "./content/types";
 
 const contentDirectory = path.join(process.cwd(), "content");
@@ -98,25 +94,6 @@ export function getArticle(slug: string): Article | undefined {
 }
 
 // ============================================
-// Updates (new)
-// ============================================
-
-export function getUpdates(channel?: Channel): Update[] {
-  return getContent<UpdateFrontmatter>("update", {
-    channel,
-    published: true,
-  }) as Update[];
-}
-
-export function getUpdate(slug: string): Update | undefined {
-  const update = getContentBySlug<UpdateFrontmatter>("update", slug);
-  if (!update || !update.frontmatter.published) {
-    return undefined;
-  }
-  return update as Update;
-}
-
-// ============================================
 // Projects (keeping original implementation for full compatibility)
 // ============================================
 
@@ -190,9 +167,7 @@ export function getAllTags(): string[] {
   return getTagsForCategory("article");
 }
 
-export function getUpdateTags(): string[] {
-  return getTagsForCategory("update");
-}
+
 
 // ============================================
 // Thematic Categories (Music, Biohacking, Security)
