@@ -15,6 +15,7 @@ export const siteConfig = {
     { name: "Music", href: "/music" },
     { name: "Biohacking", href: "/biohacking" },
     { name: "Security", href: "/security" },
+    { name: "Ideas", href: "/ideas" },
     { name: "Projects", href: "/projects" },
     { name: "Books", href: "/books" },
     { name: "About", href: "/about" },

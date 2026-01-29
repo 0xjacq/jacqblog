@@ -1,4 +1,4 @@
-import { getArticles, getProjects, getBooks } from "@/lib/mdx";
+import { getArticles, getProjects, getBooks, getIdeasContent } from "@/lib/mdx";
 import { siteConfig } from "@/lib/config";
 import { MetadataRoute } from "next";
 
@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const articles = getArticles();
   const projects = getProjects();
   const books = getBooks();
+  const ideas = getIdeasContent();
 
   const articleEntries = articles.map((article) => ({
     url: `${siteConfig.url}/articles/${article.slug}`,
@@ -26,6 +27,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: "yearly" as const,
     priority: 0.5,
+  }));
+
+  const ideaEntries = ideas.map((idea) => ({
+    url: `${siteConfig.url}/ideas/${idea.slug}`,
+    lastModified: new Date(idea.frontmatter.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
   }));
 
   return [
@@ -62,5 +70,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...articleEntries,
     ...projectEntries,
     ...bookEntries,
+    ...ideaEntries,
   ];
 }

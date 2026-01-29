@@ -249,3 +249,18 @@ export function getSecurityPost(slug: string): ThematicContent | undefined {
   }
   return post;
 }
+
+export function getIdeasContent(): ThematicContent[] {
+  return getContent<BaseContentFrontmatter>("idea", {
+    channel: "blog",
+    published: true,
+  });
+}
+
+export function getIdeasPost(slug: string): ThematicContent | undefined {
+  const post = getContentBySlug<BaseContentFrontmatter>("idea", slug);
+  if (!post || !post.frontmatter.published) {
+    return undefined;
+  }
+  return post;
+}

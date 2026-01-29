@@ -1,6 +1,6 @@
 // Channel types
 export type Channel = "blog" | "twitter";
-export type ContentCategory = "article" | "project" | "book" | "update" | "music" | "biohacking" | "security";
+export type ContentCategory = "article" | "project" | "book" | "update" | "music" | "biohacking" | "security" | "idea";
 export type ContentType =
   | "tutorial"
   | "deep-dive"

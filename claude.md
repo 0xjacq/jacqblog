@@ -26,6 +26,7 @@ All MDX files in `content/`. Loaders in `lib/mdx.ts`.
 | Music | `content/music/` |
 | Biohacking | `content/biohacking/` |
 | Security | `content/security/` |
+| Ideas | `content/ideas/` |
 | Drafts | `content/drafts/` |
 
 ## Frontmatter
