@@ -66,10 +66,44 @@ function GitHubIcon() {
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = getProject(slug);
+  let project = getProject(slug);
 
   if (!project) {
     notFound();
+  }
+
+  // If content is thin (< 300 chars) and has a GitHub link, interpret it as a stub
+  // and fetch the README from GitHub to display instead.
+  if (project.content.length < 300 && project.frontmatter.github) {
+    try {
+      // Extract owner/repo from github URL (e.g. "https://github.com/owner/repo")
+      const match = project.frontmatter.github.match(/github\.com\/([^/]+)\/([^/]+)/);
+      if (match) {
+        const [, owner, repo] = match;
+        // Try 'main' branch first
+        let readmeUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/README.md`;
+        let res = await fetch(readmeUrl);
+
+        // Fallback to 'master' if main fails
+        if (!res.ok) {
+          readmeUrl = `https://raw.githubusercontent.com/${owner}/${repo}/master/README.md`;
+          res = await fetch(readmeUrl);
+        }
+
+        if (res.ok) {
+          const readmeContent = await res.text();
+          // Replace the project content with the fetched README
+          // We keep the frontmatter from local file so metadata/title stays controlled
+          project = {
+            ...project,
+            content: readmeContent
+          };
+        }
+      }
+    } catch (e) {
+      console.error(`Failed to fetch README for ${slug}`, e);
+      // Fallback to existing content if fetch fails
+    }
   }
 
   return (
