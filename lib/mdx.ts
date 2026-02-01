@@ -177,6 +177,7 @@ export interface ThematicContent {
   frontmatter: BaseContentFrontmatter;
   content: string;
   readingTime?: string;
+  category?: string;
 }
 
 export function getMusicContent(): ThematicContent[] {
