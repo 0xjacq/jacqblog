@@ -19,6 +19,7 @@ const categoryPaths: Record<ContentCategory, string> = {
   project: "projects",
   book: "books",
   idea: "ideas",
+  finance: "finance",
 };
 
 export function PostCard({ post, category }: PostCardProps) {

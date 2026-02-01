@@ -20,7 +20,7 @@ All MDX files in `content/`. Loaders in `lib/mdx.ts`.
 | Category | Directory |
 |----------|-----------|
 | Articles | `content/articles/` |
-| Updates | `content/updates/` |
+| Finance | `content/finance/` |
 | Projects | `content/projects/` |
 | Books | `content/books/` |
 | Music | `content/music/` |

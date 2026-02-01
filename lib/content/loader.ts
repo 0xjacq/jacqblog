@@ -21,6 +21,7 @@ const categoryDirs: Record<ContentCategory, string> = {
   biohacking: "biohacking",
   security: "security",
   idea: "ideas",
+  finance: "finance",
 };
 
 function getMDXFiles(dir: string): string[] {

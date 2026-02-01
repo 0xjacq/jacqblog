@@ -254,3 +254,18 @@ export function getIdeasPost(slug: string): ThematicContent | undefined {
   }
   return post;
 }
+
+export function getFinanceContent(): ThematicContent[] {
+  return getContent<BaseContentFrontmatter>("finance", {
+    channel: "blog",
+    published: true,
+  });
+}
+
+export function getFinancePost(slug: string): ThematicContent | undefined {
+  const post = getContentBySlug<BaseContentFrontmatter>("finance", slug);
+  if (!post || !post.frontmatter.published) {
+    return undefined;
+  }
+  return post;
+}

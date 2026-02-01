@@ -121,6 +121,7 @@ async function updateFrontmatterWithTweetId(
     biohacking: "biohacking",
     security: "security",
     idea: "ideas",
+    finance: "finance",
   };
 
   const filePath = path.join(
