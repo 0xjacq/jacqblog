@@ -61,8 +61,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert content to thread segments
-    const segments = contentToThread(content.content, content.frontmatter);
+    // Check for custom text override, otherwise convert content to thread
+    let segments: string[];
+    if (content.frontmatter.channels?.twitter?.customText) {
+      segments = [content.frontmatter.channels.twitter.customText];
+    } else {
+      segments = contentToThread(content.content, content.frontmatter);
+    }
 
     // Limit to reasonable thread length
     const maxSegments = format === "single" ? 1 : 10;

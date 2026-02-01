@@ -17,9 +17,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (text.length > 280) {
+    if (text.length > 4000) {
       return NextResponse.json(
-        { error: `Tweet too long: ${text.length}/280 characters` },
+        { error: `Tweet too long: ${text.length}/4000 characters` },
         { status: 400 }
       );
     }
