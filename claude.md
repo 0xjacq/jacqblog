@@ -1,6 +1,10 @@
-# jacqblog
+# CLAUDE.md
 
-Next.js 16 blog with MDX. All content must be written in English unless specified otherwise.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+Next.js 16 blog with MDX and multi-channel publishing (blog + Twitter). All content must be written in English unless specified otherwise.
 
 ## Commands
 
@@ -13,21 +17,52 @@ npm run lint     # ESLint
 vercel --prod --token=$(grep VERCEL_TOKEN .env.local | cut -d '=' -f2)
 ```
 
+## Architecture
+
+### Content System
+
+Content flows through three layers:
+
+1. **MDX Files** (`content/{category}/`) — Source files with YAML frontmatter
+2. **Content Loader** (`lib/content/loader.ts`) — Reads, filters, and sorts content by category/channel
+3. **Pages** (`app/{category}/`) — Renders content using `PostCard` or category-specific cards
+
+The loader uses `lib/content/types.ts` for type definitions. Categories are mapped to directories in `categoryDirs` within the loader.
+
+### Adding a New Category
+
+When adding a new content category:
+
+1. Add to `ContentCategory` type in `lib/content/types.ts`
+2. Add directory mapping in `categoryDirs` in `lib/content/loader.ts`
+3. Create `content/{category}/` directory
+4. Create `app/{category}/page.tsx` and `app/{category}/[slug]/page.tsx`
+5. **Add to navigation** in `lib/config.ts` → `siteConfig.nav`
+6. **Add to homepage recent posts** in `app/page.tsx` → `getAllContent()` categories array
+
+Missing steps 5-6 will cause content to exist but be invisible to users.
+
+### Multi-Channel Publishing
+
+Content can target multiple channels via frontmatter:
+- `channels.blog.enabled` — Appears on website
+- `channels.twitter.enabled` — Can be published as thread via API
+
+Twitter publishing: `POST /api/publish/twitter` with `{slug, category, format}`
+
 ## Content
 
-All MDX files in `content/`. Loaders in `lib/mdx.ts`.
-
-| Category | Directory |
-|----------|-----------|
-| Articles | `content/articles/` |
-| Finance | `content/finance/` |
-| Projects | `content/projects/` |
-| Books | `content/books/` |
-| Music | `content/music/` |
-| Biohacking | `content/biohacking/` |
-| Security | `content/security/` |
-| Ideas | `content/ideas/` |
-| Drafts | `content/drafts/` |
+| Category | Directory | Route |
+|----------|-----------|-------|
+| Articles | `content/articles/` | `/articles` |
+| Finance | `content/finance/` | `/finance` |
+| Projects | `content/projects/` | `/projects` |
+| Books | `content/books/` | `/books` |
+| Music | `content/music/` | `/music` |
+| Biohacking | `content/biohacking/` | `/biohacking` |
+| Security | `content/security/` | `/security` |
+| Ideas | `content/ideas/` | `/ideas` |
+| Drafts | `content/drafts/` | (not routed) |
 
 ## Frontmatter
 
