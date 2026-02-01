@@ -9,7 +9,6 @@ import {
 import type {
   ArticleFrontmatter,
   Article,
-  Channel,
   BaseContentFrontmatter,
 } from "./content/types";
 
@@ -79,14 +78,14 @@ function readMDXFile<T>(filePath: string): { frontmatter: T; content: string } {
 // ============================================
 
 export function getArticles(): Article[] {
-  return getContent<ArticleFrontmatter>("article", {
+  return getContent<ArticleFrontmatter>("ai", {
     channel: "blog",
     published: true,
   }) as Article[];
 }
 
 export function getArticle(slug: string): Article | undefined {
-  const article = getContentBySlug<ArticleFrontmatter>("article", slug);
+  const article = getContentBySlug<ArticleFrontmatter>("ai", slug);
   if (!article || !article.frontmatter.published) {
     return undefined;
   }
@@ -164,7 +163,7 @@ export function getBook(slug: string): Book | undefined {
 // ============================================
 
 export function getAllTags(): string[] {
-  return getTagsForCategory("article");
+  return getTagsForCategory("ai");
 }
 
 

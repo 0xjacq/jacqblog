@@ -12,7 +12,7 @@ interface PostCardProps {
 }
 
 const categoryPaths: Record<ContentCategory, string> = {
-  article: "articles",
+  ai: "ai",
   security: "security",
   music: "music",
   biohacking: "biohacking",

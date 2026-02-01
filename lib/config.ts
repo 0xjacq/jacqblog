@@ -10,7 +10,7 @@ export const siteConfig = {
     github: "https://github.com/0xjacq",
   },
   nav: [
-    { name: "Articles", href: "/articles" },
+    { name: "AI", href: "/ai" },
     { name: "Finance", href: "/finance" },
     { name: "Music", href: "/music" },
     { name: "Biohacking", href: "/biohacking" },

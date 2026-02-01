@@ -54,7 +54,7 @@ Twitter publishing: `POST /api/publish/twitter` with `{slug, category, format}`
 
 | Category | Directory | Route |
 |----------|-----------|-------|
-| Articles | `content/articles/` | `/articles` |
+| AI | `content/ai/` | `/ai` |
 | Finance | `content/finance/` | `/finance` |
 | Projects | `content/projects/` | `/projects` |
 | Books | `content/books/` | `/books` |

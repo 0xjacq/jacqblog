@@ -14,7 +14,7 @@ const contentDirectory = path.join(process.cwd(), "content");
 
 // Map category to directory name
 const categoryDirs: Record<ContentCategory, string> = {
-  article: "articles",
+  ai: "ai",
   project: "projects",
   book: "books",
   music: "music",

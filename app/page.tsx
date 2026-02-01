@@ -6,7 +6,7 @@ import type { BaseContentFrontmatter } from "@/lib/content/types";
 
 export default function Home() {
   const recentPosts = getAllContent<BaseContentFrontmatter>(
-    ["article", "finance", "security", "music", "biohacking", "idea"],
+    ["ai", "finance", "security", "music", "biohacking", "idea"],
     { channel: "blog", published: true }
   ).slice(0, 3);
 
@@ -55,7 +55,7 @@ export default function Home() {
       <section>
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">Recent Posts</h2>
-          <Link href="/articles" className="text-sm text-accent hover:underline">
+          <Link href="/ai" className="text-sm text-accent hover:underline">
             View all
           </Link>
         </div>

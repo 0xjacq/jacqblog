@@ -1,46 +1,47 @@
 import { notFound } from "next/navigation";
-import { getArticle, getArticles } from "@/lib/mdx";
+import { getContent, getContentBySlug } from "@/lib/content/loader";
 import { MDXContent } from "@/components/MDXComponents";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { formatDate } from "@/lib/utils";
 import { siteConfig } from "@/lib/config";
 import type { Metadata } from "next";
+import type { BaseContentFrontmatter } from "@/lib/content/types";
 
-interface ArticlePageProps {
+interface AIPostPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const articles = getArticles();
-  return articles.map((article) => ({
-    slug: article.slug,
+  const posts = getContent<BaseContentFrontmatter>("ai", { published: true });
+  return posts.map((post) => ({
+    slug: post.slug,
   }));
 }
 
 export async function generateMetadata({
   params,
-}: ArticlePageProps): Promise<Metadata> {
+}: AIPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const post = getContentBySlug<BaseContentFrontmatter>("ai", slug);
 
-  if (!article) {
+  if (!post) {
     return {};
   }
 
   return {
-    title: article.frontmatter.title,
-    description: article.frontmatter.description,
+    title: post.frontmatter.title,
+    description: post.frontmatter.description,
     openGraph: {
-      title: article.frontmatter.title,
-      description: article.frontmatter.description,
+      title: post.frontmatter.title,
+      description: post.frontmatter.description,
       type: "article",
-      publishedTime: article.frontmatter.date,
+      publishedTime: post.frontmatter.date,
       authors: [siteConfig.author],
     },
     twitter: {
       card: "summary_large_image",
-      title: article.frontmatter.title,
-      description: article.frontmatter.description,
+      title: post.frontmatter.title,
+      description: post.frontmatter.description,
     },
   };
 }
@@ -59,16 +60,16 @@ function TwitterIcon() {
   );
 }
 
-export default async function ArticlePage({ params }: ArticlePageProps) {
+export default async function AIPostPage({ params }: AIPostPageProps) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const post = getContentBySlug<BaseContentFrontmatter>("ai", slug);
 
-  if (!article) {
+  if (!post || !post.frontmatter.published) {
     notFound();
   }
 
-  const shareUrl = `${siteConfig.url}/articles/${slug}`;
-  const shareText = `${article.frontmatter.title} by @jacq`;
+  const shareUrl = `${siteConfig.url}/ai/${slug}`;
+  const shareText = `${post.frontmatter.title} by @jacq`;
   const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 
   return (
@@ -76,17 +77,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <article>
         <header className="mb-8">
           <h1 className="mb-4 text-3xl font-bold text-white">
-            {article.frontmatter.title}
+            {post.frontmatter.title}
           </h1>
           <div className="flex items-center gap-4 text-sm text-muted">
-            <time dateTime={article.frontmatter.date}>
-              {formatDate(article.frontmatter.date)}
+            <time dateTime={post.frontmatter.date}>
+              {formatDate(post.frontmatter.date)}
             </time>
             <span>&middot;</span>
-            <span>{article.readingTime}</span>
+            <span>{post.readingTime}</span>
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
-            {article.frontmatter.tags.map((tag) => (
+            {post.frontmatter.tags.map((tag) => (
               <span
                 key={tag}
                 className="rounded-full bg-border px-2.5 py-0.5 text-xs text-muted"
@@ -97,7 +98,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </header>
 
-        <MDXContent source={article.content} />
+        <MDXContent source={post.content} />
 
         <footer className="mt-12 border-t border-border pt-8">
           <div className="mb-8 flex items-center justify-between">

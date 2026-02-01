@@ -114,7 +114,7 @@ async function updateFrontmatterWithTweetId(
   tweetId: string
 ): Promise<void> {
   const categoryDirs: Record<ContentCategory, string> = {
-    article: "articles",
+    ai: "ai",
     project: "projects",
     book: "books",
     music: "music",
