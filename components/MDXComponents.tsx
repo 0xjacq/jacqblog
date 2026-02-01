@@ -1,6 +1,7 @@
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import Image, { ImageProps } from "next/image";
 import Link from "next/link";
+import remarkGfm from "remark-gfm";
 
 function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const href = props.href;
@@ -56,6 +57,11 @@ export function MDXContent({ source }: MDXContentProps) {
       <MDXRemote
         source={source}
         components={components as MDXRemoteProps["components"]}
+        options={{
+          mdxOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        }}
       />
     </div>
   );
