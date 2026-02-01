@@ -11,6 +11,7 @@ export const siteConfig = {
   },
   nav: [
     { name: "Articles", href: "/articles" },
+    { name: "Finance", href: "/finance" },
     { name: "Music", href: "/music" },
     { name: "Biohacking", href: "/biohacking" },
     { name: "Security", href: "/security" },
