@@ -1,18 +1,11 @@
 "use client";
 
-import { useCallback, useRef } from "react";
-import dynamic from "next/dynamic";
-import type { Monaco } from "@monaco-editor/react";
-import type { editor } from "monaco-editor";
-
-const Editor = dynamic(() => import("@monaco-editor/react").then((mod) => mod.default), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full items-center justify-center bg-gray-900">
-      <div className="text-gray-400">Loading editor...</div>
-    </div>
-  ),
-});
+import { useEffect, useRef, useCallback } from "react";
+import { EditorState } from "@codemirror/state";
+import { EditorView, keymap } from "@codemirror/view";
+import { markdown } from "@codemirror/lang-markdown";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { defaultKeymap } from "@codemirror/commands";
 
 interface ArticleEditorProps {
   content: string;
@@ -22,50 +15,116 @@ interface ArticleEditorProps {
 }
 
 export function ArticleEditor({ content, onChange, onSave, isDirty }: ArticleEditorProps) {
-  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const viewRef = useRef<EditorView | null>(null);
+  const onChangeRef = useRef(onChange);
+  const onSaveRef = useRef(onSave);
 
-  const handleEditorDidMount = useCallback(
-    (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
-      editorRef.current = editor;
+  // Keep refs updated
+  onChangeRef.current = onChange;
+  onSaveRef.current = onSave;
 
-      // Add Cmd/Ctrl+S save shortcut
-      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-        onSave();
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const saveKeymap = keymap.of([
+      {
+        key: "Mod-s",
+        run: () => {
+          onSaveRef.current();
+          return true;
+        },
+      },
+    ]);
+
+    const updateListener = EditorView.updateListener.of((update) => {
+      if (update.docChanged) {
+        onChangeRef.current(update.state.doc.toString());
+      }
+    });
+
+    const state = EditorState.create({
+      doc: content,
+      extensions: [
+        saveKeymap,
+        keymap.of(defaultKeymap),
+        markdown(),
+        oneDark,
+        updateListener,
+        EditorView.lineWrapping,
+        EditorView.theme({
+          "&": {
+            height: "100%",
+            fontSize: "14px",
+          },
+          ".cm-scroller": {
+            overflow: "auto",
+            fontFamily: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace",
+            lineHeight: "1.6",
+          },
+          ".cm-content": {
+            padding: "16px 0",
+          },
+          ".cm-gutters": {
+            backgroundColor: "#282c34",
+            border: "none",
+          },
+        }),
+      ],
+    });
+
+    const view = new EditorView({
+      state,
+      parent: containerRef.current,
+    });
+
+    viewRef.current = view;
+
+    return () => {
+      view.destroy();
+      viewRef.current = null;
+    };
+    // Only run on mount - content sync handled below
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Sync external content changes to editor
+  const syncContent = useCallback((newContent: string) => {
+    const view = viewRef.current;
+    if (!view) return;
+
+    const currentContent = view.state.doc.toString();
+    if (currentContent !== newContent) {
+      view.dispatch({
+        changes: {
+          from: 0,
+          to: currentContent.length,
+          insert: newContent,
+        },
       });
-    },
-    [onSave]
-  );
+    }
+  }, []);
 
-  const handleEditorChange = useCallback(
-    (value: string | undefined) => {
-      onChange(value || "");
-    },
-    [onChange]
-  );
+  // Handle external content updates (e.g., after save resets)
+  useEffect(() => {
+    // Skip initial render - let the EditorState handle initial content
+    const view = viewRef.current;
+    if (view) {
+      syncContent(content);
+    }
+  }, [content, syncContent]);
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-full min-h-[400px] bg-[#282c34]">
       {isDirty && (
         <div className="absolute right-2 top-2 z-10 rounded bg-yellow-500 px-2 py-1 text-xs font-medium text-white">
           Unsaved changes
         </div>
       )}
-      <Editor
-        height="100%"
-        language="markdown"
-        theme="vs-dark"
-        value={content}
-        onChange={handleEditorChange}
-        onMount={handleEditorDidMount}
-        options={{
-          minimap: { enabled: false },
-          fontSize: 14,
-          lineHeight: 1.6,
-          wordWrap: "on",
-          scrollBeyondLastLine: false,
-          padding: { top: 16 },
-          automaticLayout: true,
-        }}
+      <div
+        key={content ? "loaded" : "empty"}
+        ref={containerRef}
+        className="h-full [&_.cm-editor]:h-full"
       />
     </div>
   );

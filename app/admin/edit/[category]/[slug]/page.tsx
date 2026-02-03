@@ -205,7 +205,7 @@ export default function EditArticlePage() {
               onChange={setFrontmatter}
             />
           </div>
-          <div className="flex-1 overflow-hidden rounded-lg border border-gray-200">
+          <div className="min-h-[400px] flex-1 overflow-hidden rounded-lg border border-gray-200">
             <ArticleEditor
               content={content}
               onChange={setContent}
