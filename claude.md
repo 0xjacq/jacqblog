@@ -12,10 +12,11 @@ Next.js 16 blog with MDX and multi-channel publishing (blog + Twitter). All cont
 npm run dev      # Dev server (localhost:3000)
 npm run build    # Production build
 npm run lint     # ESLint
-
-# Deploy
-vercel --prod --token=$(grep VERCEL_TOKEN .env.local | cut -d '=' -f2)
 ```
+
+## Deployment
+
+Vercel auto-deploys on push to `main`. No manual deploy needed.
 
 ## Architecture
 
