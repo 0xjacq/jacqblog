@@ -13,7 +13,7 @@ import type {
 const contentDirectory = path.join(process.cwd(), "content");
 
 // Map category to directory name
-const categoryDirs: Record<ContentCategory, string> = {
+export const categoryDirs: Record<ContentCategory, string> = {
   ai: "ai",
   project: "projects",
   book: "books",
