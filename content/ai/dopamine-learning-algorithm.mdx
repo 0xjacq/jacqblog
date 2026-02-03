@@ -1,0 +1,113 @@
+---
+title: "Dopamine Is Not What You Think: The Learning Algorithm Hidden in Your Brain"
+date: "2026-02-03"
+description: "The algorithm that powers AlphaGo and AlphaFold has been running in your brainstem for millions of years. You just didn't know it."
+tags: ["neuroscience", "ai", "dopamine", "learning", "motivation"]
+published: true
+contentType: deep-dive
+channels:
+  blog: { enabled: true, format: "full" }
+  twitter: { enabled: false }
+---
+
+**The algorithm that beats world champions at Go is running in your brainstem right now.**
+
+In 2016, DeepMind's AlphaGo crushed Lee Sedol, one of history's greatest Go players. The core engine: temporal difference learning. Researchers later used the same approach to crack protein folding—a 50-year unsolved problem—and won a Nobel Prize for AlphaFold.
+
+The strange part: computer scientists didn't invent this algorithm. They discovered it. In your neurons. Dopamine has been running temporal difference learning for millions of years before anyone wrote a line of code.
+
+## The Incomplete Story
+
+You've heard the simplified versions:
+
+**Dopamine equals pleasure.** Wrong. Dopamine fires before the reward, not during. The spike is anticipation, not enjoyment.
+
+**Dopamine encodes reward prediction error.** Closer. Reality exceeds expectations, dopamine spikes. Reality disappoints, it dips. This is the Rescorla-Wagner model from 1972—correct, but incomplete.
+
+There's a deeper story. One that explains why AI researchers found the same algorithm in their code that neuroscientists found in your brain.
+
+## The Temporal Difference Insight
+
+The old model: compare what you expected to what you got. Predicted reward of 5, received 7, prediction error of +2. Dopamine fires. Learning happens.
+
+But this breaks in the real world. Rewards are delayed. A foraging animal doesn't know if a path leads to food until it reaches the end. If learning only happens at final outcomes, you're stuck waiting. No updates mid-journey.
+
+Richard Sutton and Andrew Barto solved this in 1988. The insight: **don't compare expectations to outcomes. Compare successive expectations to each other.**
+
+Picture an animal searching for food. It starts down a path with some expectation of success. Five steps later, it spots a familiar landmark—this path led to berries before. Its expectation jumps. That jump *is* the reward signal. Dopamine fires not because it found food, but because its prediction of finding food just improved.
+
+No waiting for the end. The system updates continuously. Every moment, dopamine compares "what I expected a second ago" to "what I expect now." Improvement triggers a spike. Deterioration triggers a dip.
+
+Learning happens in real time. Long behavior sequences work because each step reinforces the previous one. The algorithm bootstraps itself through time.
+
+## The Algorithm That Crawled Out of Your Mind
+
+In the 1990s, neuroscientists started recording from dopamine neurons during learning tasks. The results were startling.
+
+Firing patterns matched Sutton and Barto's algorithm exactly. Not approximately. *Exactly.* Dopamine neurons weren't just computing reward prediction error—they were computing *temporal difference* reward prediction error. Comparing successive expectations. Updating in real time. Chaining predictions forward through time.
+
+The algorithm that computer scientists derived from first principles was already installed in every mammal on earth.
+
+Fast forward to DeepMind. AlphaGo, the system that beat the world Go champion? Temporal difference learning. AlphaFold, which cracked the 50-year protein folding problem and won a Nobel Prize? Same algorithm.
+
+As neuroscientist Reed Montague puts it: the algorithm "crawled out of your mind into a program." Now systems running that algorithm routinely exceed human performance at tasks humans invented.
+
+A strange loop. We discovered an algorithm in our neurons. We implemented it in silicon. The silicon beat us at our own games. Now we use those AI systems to understand our neurons even better.
+
+## The Opponent: Serotonin
+
+Dopamine doesn't work alone. It has an opponent.
+
+When dopamine rises, serotonin falls. When serotonin rises, dopamine drops. They're not just different neurotransmitters—they compute different things.
+
+Dopamine tracks positive expectations. Things getting better. Rewards approaching.
+
+Serotonin tracks negative expectations. Waiting. Threats. Bad outcomes approaching.
+
+This explains a paradox about SSRIs. These antidepressants boost serotonin. But when neurons flood with serotonin, some spills into dopamine terminals. The systems are so entangled that shifting one shifts the other.
+
+This might be why SSRIs work brilliantly for some people and backfire for others. The dopamine-serotonin balance is individual. Manipulate one, and you manipulate both—in ways nobody can fully predict.
+
+The opponent process also explains why both systems exist. Dopamine alone creates reckless optimism—every path looks good, every risk worth taking. Serotonin alone creates paralysis—too much waiting, too much caution. Together they create balanced learning. Opportunity and threat, both computed.
+
+## When the System Flips
+
+Dopamine doesn't always encode positive expectations. Under stress, deprivation, or perceived emergency, it flips.
+
+Same molecule. Same neurons. Opposite computation. Instead of firing for good predictions, it fires for bad ones.
+
+This explains the "hungry judge" phenomenon. Judges hand down harsher sentences right before lunch. More lenient after eating. Not willpower failure—dopamine state-switching. In a depleted state, the prediction system tilts toward negativity.
+
+Trauma can make this permanent. If your nervous system gets stuck in emergency mode, dopamine keeps computing threats instead of rewards. The same algorithm that learned to chase pleasure now learns to anticipate pain.
+
+This isn't weakness. It's not moral failure. It's an algorithm adapting to perceived survival conditions. The fix isn't trying harder—it's signaling to your nervous system that the emergency is over.
+
+## What This Means for You
+
+Understanding dopamine as an algorithm changes how you think about motivation, learning, and decisions.
+
+**Dopamine is currency.** Your brain uses it to compare unlike things—food, sex, achievement, status—on a common scale. This is why you can choose between options that have nothing in common. Dopamine converts everything to the same unit: expected value.
+
+**Effort strengthens the circuit.** Deliberately slowing down and making things harder strengthens the dopamine learning system. Easy dopamine—phones, sugar, cheap entertainment—trains weak predictions. Effortful dopamine—delayed rewards, hard problems, real achievement—trains strong ones.
+
+**You're always foraging.** The dopamine system evolved for animals making continuous decisions: stay in this patch or move on? Apply for this job or keep looking? Date this person or keep searching? The algorithm doesn't know it's 2026. It thinks you're still hunting berries.
+
+This foraging logic explains why "good enough" feels so hard. Your dopamine system constantly compares the current option to the expected value of alternatives. Even when you're satisfied, the algorithm keeps computing: stay or go?
+
+## The Takeaway
+
+Your brain runs algorithms that computer scientists independently discovered and built into machines. Those machines now beat humans at games humans invented, predict protein structures no human could model, and keep improving.
+
+This isn't metaphor. It's not "like" an algorithm. It *is* the algorithm. Temporal difference learning. Successive expectations updating in real time. Rewards chained through predictions of predictions.
+
+Understanding this reframes everything. Motivation isn't mysterious—it's output from a prediction system. Learning isn't vague—it's prediction errors updating weights. Decisions aren't arbitrary—they're foraging computations on a dopamine scale.
+
+The algorithm in your head powers AlphaGo and AlphaFold. It's also plastic—it updates based on experience. Every prediction that resolves, every expectation that exceeds or disappoints reality, trains the model.
+
+You're training it right now.
+
+The question is whether you're doing it deliberately.
+
+---
+
+*This article draws on Richard Sutton and Andrew Barto's work on temporal difference learning, Wolfram Schultz's recordings of dopamine neurons, and Reed Montague's computational neuroscience research on valuation and decision-making.*
