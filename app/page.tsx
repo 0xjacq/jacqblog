@@ -55,7 +55,7 @@ export default function Home() {
       <section>
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">Recent Posts</h2>
-          <Link href="/ai" className="text-sm text-accent hover:underline">
+          <Link href="/articles" className="text-sm text-accent hover:underline">
             View all
           </Link>
         </div>
