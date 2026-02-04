@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { EditorState } from "@codemirror/state";
-import { EditorView, keymap } from "@codemirror/view";
+import { EditorView, keymap, lineNumbers, highlightActiveLine, highlightActiveLineGutter } from "@codemirror/view";
 import { markdown } from "@codemirror/lang-markdown";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { defaultKeymap } from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import { syntaxHighlighting, defaultHighlightStyle, bracketMatching } from "@codemirror/language";
 
 interface ArticleEditorProps {
   content: string;
@@ -46,8 +47,14 @@ export function ArticleEditor({ content, onChange, onSave, isDirty }: ArticleEdi
     const state = EditorState.create({
       doc: content,
       extensions: [
+        lineNumbers(),
+        highlightActiveLineGutter(),
+        highlightActiveLine(),
+        history(),
+        bracketMatching(),
+        syntaxHighlighting(defaultHighlightStyle),
         saveKeymap,
-        keymap.of(defaultKeymap),
+        keymap.of([...defaultKeymap, ...historyKeymap]),
         markdown(),
         oneDark,
         updateListener,
