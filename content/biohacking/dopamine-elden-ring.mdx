@@ -12,27 +12,31 @@ channels:
 
 ![Dopamine and Elden Ring](/images/biohacking/dopamine-elden-ring.png)
 
-> This is **Part 2** of the Dopamine Series. Start with **[Part 1: The Learning Algorithm](/biohacking/dopamine-learning-algorithm)** to understand how your brain's reward prediction system actually works.
+> This is **Part 2** of the Dopamine Series. In Part 1, we explored how your brain runs the same temporal difference learning algorithm that powers AlphaGo and AlphaFold—comparing successive predictions to learn in real time. If you haven't read it, start with **[Part 1: The Learning Algorithm](/biohacking/dopamine-learning-algorithm)** for the foundation.
 
-Elden Ring is one of the hardest games ever made. Players die hundreds of times. Yet twenty million people can't stop playing.
+**Twenty million people paid money to die hundreds of times.**
 
-Why?
+Elden Ring is punishingly difficult. Most players spend 100+ hours dying, learning patterns, dying again. By traditional game design, this should create frustration and refunds.
+
+Instead, it created one of the most successful games ever made.
+
+Why? Because FromSoftware accidentally implemented the same reward prediction algorithm that powers your brain—and they implemented it *correctly*.
 
 ## The Elden Ring Effect
 
 When you walk into a boss arena, you expect to die. You know the boss has patterns you haven't learned. Death isn't failure. It's the tutorial.
 
-Your brain runs on prediction errors. Dopamine fires not from pleasure, but from the gap between expectation and reality. Reality beats expectations? Dopamine spikes. Reality disappoints? Dopamine drops.
+Remember from Part 1: your brain runs on prediction errors. Dopamine doesn't fire from pleasure—it fires from the gap between expectation and reality. When reality exceeds expectations, you get a spike. When reality disappoints, a dip.
 
-This isn't pop psychology. It's the algorithm behind AlphaGo and AlphaFold (Nobel Prize, protein folding). Reinforcement learning trains AI on prediction errors. Your brain has run this algorithm for millions of years. Elden Ring accidentally trains it correctly.
+Elden Ring exploits this machinery.
 
-Your expectation entering a fight: I will die but maybe learn one pattern. When you dodge that grab attack for the first time, reality exceeded expectations. Dopamine spike. Progress, even while getting destroyed.
+Your expectation entering a fight: I will die but maybe learn one pattern. When you dodge that grab attack for the first time, reality exceeded expectations. Dopamine spike. Progress, even while dying repeatedly.
 
 The game trained you to expect death and frame learning as the goal.
 
 ## The Real World Problem
 
-Most people sit down expecting progress. They expect the code to compile, the email to get a response. When they hit a bug, reality falls below expectation. Dopamine crashes. The brain registers this as something to avoid.
+Most people sit down expecting progress. They expect the code to compile, the email to get a response. When they hit a bug, reality falls below expectation. Dopamine dips below baseline. The brain registers this as aversive—something to avoid.
 
 Every time you expect success and find an obstacle, you're training yourself to quit. The 200-million-year-old reward system learns that work leads to bad prediction errors.
 
@@ -46,6 +50,14 @@ Experienced players don't think of runs as attempts to win. They're scouting mis
 
 Apply this to work. A bug is data about how your code actually behaves. A rejected email is information about what doesn't resonate. A confused user is a free usability test. Obstacles become wins.
 
+**Example:** You're building a signup flow. First user test: the person gets confused on step 2 and abandons.
+
+**Traditional framing:** "The flow failed." (Negative prediction error → dopamine dip → aversion)
+
+**Elden Ring framing:** "Scouting run complete. Learned that step 2 isn't clear. Data acquired." (Positive prediction error → dopamine spike → engagement)
+
+Same objective outcome. Different dopamine response. The difference is what you expected walking in.
+
 ## The Boss Fight Framework
 
 Before any hard task, set expectations like you're entering a boss arena.
@@ -58,7 +70,7 @@ Before any hard task, set expectations like you're entering a boss arena.
 
 ## In Practice
 
-**Coding:** Enter each session expecting bugs. Null pointer exception? Pattern learned. Integration fails? Assumption discovered.
+**Coding:** Enter each session expecting bugs. Null pointer exception? That's a pattern learned. Integration fails? That's an assumption discovered.
 
 **Outreach:** Goal is to collect ten rejections fast. Ninety-nine rejections then one close = ninety-nine data points the person who quit after five never got.
 
@@ -68,7 +80,7 @@ Hunt for failure. When you hunt for it, finding it feels like success.
 
 ## Why It Works
 
-Your brain doesn't care what's objectively good for you. It responds to prediction errors. Low expectations + learning as progress = constant small wins during hard work.
+Your brain doesn't optimize for what's objectively good for you. It responds to prediction errors. Low expectations + learning as progress = constant small wins during hard work.
 
 Elden Ring does this through game design. In real life, you set the frame yourself.
 
@@ -81,6 +93,12 @@ You run the same prediction error machinery. The difference is how you set expec
 Walk into work like a boss arena. Expect to die. Hunt patterns. Count attempts. Make learning the goal.
 
 The game already taught you how to love hard things. Apply it everywhere.
+
+---
+
+**Next:** You've seen the algorithm in action. Now learn how to control it deliberately. Part 3 reveals the one control surface you have over 200 million years of reward circuitry—and how to use it.
+
+Read **[Part 3: The Controller in Your Skull](/biohacking/pfc-dopamine-controller)** →
 
 ## The Dopamine Series
 
