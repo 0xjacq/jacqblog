@@ -1,5 +1,8 @@
 # CLAUDE.md
 
+Always use exa mcp to fetch web content.
+
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
@@ -13,6 +16,9 @@ npm run dev      # Dev server (localhost:3000)
 npm run build    # Production build
 npm run lint     # ESLint
 ```
+
+Always proceed to tests before commit and pushing new code.
+
 
 ## Deployment
 
@@ -64,6 +70,7 @@ Twitter publishing: `POST /api/publish/twitter` with `{slug, category, format}`
 | Security | `content/security/` | `/security` |
 | Ideas | `content/ideas/` | `/ideas` |
 | Drafts | `content/drafts/` | (not routed) |
+| Resources | `content/resources/` | (not routed) |
 
 ## Frontmatter
 
