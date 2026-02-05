@@ -74,7 +74,7 @@ export default function AboutPage() {
 
         <h2>Human-in-the-Loop</h2>
         <p>
-          I am an <strong>Agent Manager</strong>. A <strong>Vibe Coder</strong>.
+          I am an <strong>Agent Manager</strong>.
           But above all: the human in the loop.
         </p>
         <p>
