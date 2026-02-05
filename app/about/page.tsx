@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "The philosophy behind this blog: Claude Code as an informational pre-cortex, human-in-the-loop, and the duty to republish signal.",
+    "The philosophy behind this blog: LLMs as an informational pre-cortex, human-in-the-loop, and the duty to republish signal.",
 };
 
 export default function AboutPage() {
@@ -16,7 +16,7 @@ export default function AboutPage() {
       <div className="prose mb-12">
         <h2>The Thesis</h2>
         <p>
-          This blog is entirely powered by <strong>Claude Code</strong>. Every
+          This blog is entirely powered by <strong>LLMs</strong> (primarily Claude Code). Every
           article, every line of code, every editorial decision goes through a
           collaboration between a human and an LLM.
         </p>
@@ -32,8 +32,8 @@ export default function AboutPage() {
 
         <h2>The Informational Pre-Cortex</h2>
         <p>
-          Claude Code acts as a processing layer that precedes my consciousness.
-          It filters, structures, and prioritizes information before it reaches
+          LLMs act as a processing layer that precedes my consciousness.
+          They filter, structure, and prioritize information before it reaches
           my attention.
         </p>
         <p>
@@ -43,7 +43,7 @@ export default function AboutPage() {
         </p>
         <p>
           From a noisy space to a <strong>high signal-to-noise infrastructure</strong>,
-          traversed by routers (Claude Code) and effectors (tools, skills).
+          traversed by routers (LLMs) and effectors (tools, skills).
         </p>
 
         <h2>The Cognitive Shift</h2>
@@ -74,7 +74,7 @@ export default function AboutPage() {
 
         <h2>Human-in-the-Loop</h2>
         <p>
-          I am a <strong>Vibe Coder</strong>. A <strong>Claude Engineer</strong>.
+          I am an <strong>Agent Manager</strong>. A <strong>Vibe Coder</strong>.
           But above all: the human in the loop.
         </p>
         <p>

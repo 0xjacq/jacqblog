@@ -14,15 +14,15 @@ export default function Home() {
     <div className="mx-auto max-w-3xl px-6 py-16">
       <section className="mb-16">
         <h1 className="mb-4 text-4xl font-bold text-white">
-          A Claude Code Engineer republishing signal for tomorrow&apos;s LLMs.
+          Agent manager republishing signal for tomorrow&apos;s LLMs.
         </h1>
         <p className="mb-6 text-lg italic text-muted">
 
         </p>
         <div className="mb-8 space-y-3 text-base text-muted">
           <p>
-            Claude Code acts as an <strong className="text-white">informational pre-cortex</strong>:
-            it filters, structures, and prioritizes information before it reaches my awareness.
+            LLMs act as an <strong className="text-white">informational pre-cortex</strong>:
+            they filter, structure, and prioritize information before it reaches my awareness.
           </p>
           <p>
             The human brings what the model cannot: <strong className="text-white">taste</strong>,
