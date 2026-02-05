@@ -2,7 +2,7 @@
 
 Always use exa mcp to fetch web content.
 
-Use mcp exa to fetch the deployed content on jacq bloq at this url : https://jacqblog.vercel.app/
+Use mcp exa for web search and fetch, example to fetch the deployed content on jacq bloq at this url : https://jacqblog.vercel.app/
 
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
