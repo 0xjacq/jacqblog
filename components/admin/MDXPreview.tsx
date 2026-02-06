@@ -44,50 +44,50 @@ export function MDXPreview({ content }: MDXPreviewProps) {
 
   if (isCompiling && !mdxSource) {
     return (
-      <div className="flex h-full items-center justify-center bg-gray-50">
-        <div className="text-gray-400">Compiling preview...</div>
+      <div className="flex h-full items-center justify-center bg-zinc-900">
+        <div className="text-zinc-400">Compiling preview...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="h-full overflow-auto bg-red-50 p-4">
-        <h3 className="mb-2 font-semibold text-red-800">MDX Error</h3>
-        <pre className="whitespace-pre-wrap text-sm text-red-700">{error}</pre>
+      <div className="h-full overflow-auto bg-red-900/20 p-4">
+        <h3 className="mb-2 font-semibold text-red-400">MDX Error</h3>
+        <pre className="whitespace-pre-wrap text-sm text-red-300">{error}</pre>
       </div>
     );
   }
 
   if (!mdxSource) {
     return (
-      <div className="flex h-full items-center justify-center bg-gray-50">
-        <div className="text-gray-400">No content to preview</div>
+      <div className="flex h-full items-center justify-center bg-zinc-900">
+        <div className="text-zinc-400">No content to preview</div>
       </div>
     );
   }
 
   return (
-    <div className="h-full overflow-auto bg-white p-6">
+    <div className="h-full overflow-auto bg-zinc-900 p-6">
       <div
-        className="prose max-w-none"
+        className="prose prose-invert max-w-none"
         style={{
-          '--tw-prose-body': '#1f2937',
-          '--tw-prose-headings': '#111827',
-          '--tw-prose-lead': '#4b5563',
-          '--tw-prose-links': '#2563eb',
-          '--tw-prose-bold': '#111827',
-          '--tw-prose-counters': '#6b7280',
-          '--tw-prose-bullets': '#9ca3af',
-          '--tw-prose-hr': '#e5e7eb',
-          '--tw-prose-quotes': '#111827',
-          '--tw-prose-quote-borders': '#e5e7eb',
-          '--tw-prose-captions': '#6b7280',
-          '--tw-prose-code': '#111827',
-          '--tw-prose-pre-code': '#e5e7eb',
-          '--tw-prose-pre-bg': '#1f2937',
-          '--tw-prose-th-borders': '#d1d5db',
-          '--tw-prose-td-borders': '#e5e7eb',
+          '--tw-prose-body': '#e5e5e5',
+          '--tw-prose-headings': '#f5f5f5',
+          '--tw-prose-lead': '#a1a1aa',
+          '--tw-prose-links': '#60a5fa',
+          '--tw-prose-bold': '#f5f5f5',
+          '--tw-prose-counters': '#a1a1aa',
+          '--tw-prose-bullets': '#71717a',
+          '--tw-prose-hr': '#3f3f46',
+          '--tw-prose-quotes': '#f5f5f5',
+          '--tw-prose-quote-borders': '#3f3f46',
+          '--tw-prose-captions': '#a1a1aa',
+          '--tw-prose-code': '#f5f5f5',
+          '--tw-prose-pre-code': '#e5e5e5',
+          '--tw-prose-pre-bg': '#18181b',
+          '--tw-prose-th-borders': '#3f3f46',
+          '--tw-prose-td-borders': '#27272a',
         } as React.CSSProperties}
       >
         <MDXRemote {...mdxSource} />

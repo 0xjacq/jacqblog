@@ -99,8 +99,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       success: true,
       article: { category, slug },
     });
-  } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (err) {
+    console.error("API Error:", err);
+    return NextResponse.json({
+      error: err instanceof Error ? err.message : "Invalid request"
+    }, { status: 400 });
   }
 }
 

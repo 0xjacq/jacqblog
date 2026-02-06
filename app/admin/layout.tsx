@@ -48,7 +48,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (isAuthenticated === null && !isLoginPage) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-zinc-400">Loading...</div>
       </div>
     );
   }
@@ -59,37 +59,37 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-zinc-950">
       {/* Admin Header */}
-      <header className="bg-white shadow">
+      <header className="border-b border-zinc-800 bg-zinc-900">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <Link href="/admin" className="text-xl font-bold text-gray-900">
+              <Link href="/admin" className="text-xl font-bold text-zinc-100">
                 Admin
               </Link>
               <nav className="flex gap-4">
                 <Link
                   href="/admin"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-zinc-400 hover:text-zinc-100"
                 >
                   Articles
                 </Link>
                 <Link
                   href="/admin/new"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-zinc-400 hover:text-zinc-100"
                 >
                   New Article
                 </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
+              <Link href="/" className="text-sm text-zinc-400 hover:text-zinc-100">
                 View Site
               </Link>
               <button
                 onClick={handleLogout}
-                className="rounded-md bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
+                className="rounded-md bg-zinc-800 px-3 py-1 text-sm text-zinc-200 hover:bg-zinc-700"
               >
                 Logout
               </button>

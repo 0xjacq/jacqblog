@@ -146,14 +146,14 @@ export default function EditArticlePage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-gray-500">Loading article...</div>
+        <div className="text-zinc-400">Loading article...</div>
       </div>
     );
   }
 
   if (error && !frontmatter.title) {
     return (
-      <div className="rounded-md bg-red-50 p-4 text-red-700">
+      <div className="rounded-md bg-red-900/20 p-4 text-red-400">
         {error}
       </div>
     );
@@ -163,8 +163,8 @@ export default function EditArticlePage() {
     <div className="flex h-[calc(100vh-140px)] flex-col">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{frontmatter.title || "Edit Article"}</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-zinc-100">{frontmatter.title || "Edit Article"}</h1>
+          <p className="text-sm text-zinc-400">
             {category} / {slug}
           </p>
         </div>
@@ -175,7 +175,7 @@ export default function EditArticlePage() {
           <button
             onClick={handleDelete}
             disabled={isDeleting}
-            className="rounded-md bg-red-100 px-4 py-2 text-red-700 hover:bg-red-200 disabled:opacity-50"
+            className="rounded-md bg-red-900/30 px-4 py-2 text-red-400 hover:bg-red-900/50 disabled:opacity-50"
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </button>
@@ -190,7 +190,7 @@ export default function EditArticlePage() {
       </div>
 
       {error && (
-        <div className="mb-4 rounded-md bg-red-50 p-3 text-red-700">
+        <div className="mb-4 rounded-md bg-red-900/20 p-3 text-red-400">
           {error}
         </div>
       )}
@@ -198,14 +198,14 @@ export default function EditArticlePage() {
       <div className="grid flex-1 grid-cols-2 gap-4 overflow-hidden">
         {/* Left side: Form + Editor */}
         <div className="flex flex-col gap-4 overflow-hidden">
-          <div className="overflow-auto rounded-lg border border-gray-200 bg-white p-4">
+          <div className="overflow-auto rounded-lg border border-zinc-800 bg-zinc-900 p-4">
             <FrontmatterEditor
               frontmatter={frontmatter}
               category={category}
               onChange={setFrontmatter}
             />
           </div>
-          <div className="min-h-[400px] flex-1 overflow-hidden rounded-lg border border-gray-200">
+          <div className="min-h-[400px] flex-1 overflow-hidden rounded-lg border border-zinc-800">
             <ArticleEditor
               content={content}
               onChange={setContent}
@@ -216,7 +216,7 @@ export default function EditArticlePage() {
         </div>
 
         {/* Right side: Preview */}
-        <div className="overflow-hidden rounded-lg border border-gray-200">
+        <div className="overflow-hidden rounded-lg border border-zinc-800">
           <MDXPreview content={content} />
         </div>
       </div>

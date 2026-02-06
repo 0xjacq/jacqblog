@@ -72,42 +72,42 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
     <div className="space-y-4">
       {/* Title */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">Title</label>
+        <label className="block text-sm font-medium text-zinc-300">Title</label>
         <input
           type="text"
           value={frontmatter.title}
           onChange={(e) => updateField("title", e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
+        <label className="block text-sm font-medium text-zinc-300">Description</label>
         <textarea
           value={frontmatter.description}
           onChange={(e) => updateField("description", e.target.value)}
           rows={3}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
       </div>
 
       {/* Date (for articles) */}
       {isArticle && (
         <div>
-          <label className="block text-sm font-medium text-gray-700">Date</label>
+          <label className="block text-sm font-medium text-zinc-300">Date</label>
           <input
             type="date"
             value={frontmatter.date}
             onChange={(e) => updateField("date", e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
       )}
 
       {/* Tags */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-zinc-300">
           Tags (comma-separated)
         </label>
         <input
@@ -119,18 +119,18 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
               e.target.value.split(",").map((t) => t.trim()).filter(Boolean)
             )
           }
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
       </div>
 
       {/* Content Type (for articles) */}
       {isArticle && (
         <div>
-          <label className="block text-sm font-medium text-gray-700">Content Type</label>
+          <label className="block text-sm font-medium text-zinc-300">Content Type</label>
           <select
             value={frontmatter.contentType || ""}
             onChange={(e) => updateField("contentType", e.target.value as ContentType || undefined)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="">None</option>
             {contentTypes.map((type) => (
@@ -150,9 +150,9 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
             id="published"
             checked={frontmatter.published}
             onChange={(e) => updateField("published", e.target.checked)}
-            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="published" className="text-sm font-medium text-gray-700">
+          <label htmlFor="published" className="text-sm font-medium text-zinc-300">
             Published
           </label>
         </div>
@@ -162,32 +162,32 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
       {isBook && (
         <>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Author</label>
+            <label className="block text-sm font-medium text-zinc-300">Author</label>
             <input
               type="text"
               value={frontmatter.author || ""}
               onChange={(e) => updateField("author", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Rating (1-10)</label>
+            <label className="block text-sm font-medium text-zinc-300">Rating (1-10)</label>
             <input
               type="number"
               min={1}
               max={10}
               value={frontmatter.rating || ""}
               onChange={(e) => updateField("rating", parseInt(e.target.value) || undefined)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Date Read</label>
+            <label className="block text-sm font-medium text-zinc-300">Date Read</label>
             <input
               type="date"
               value={frontmatter.dateRead || ""}
               onChange={(e) => updateField("dateRead", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </>
@@ -197,21 +197,21 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
       {isProject && (
         <>
           <div>
-            <label className="block text-sm font-medium text-gray-700">URL</label>
+            <label className="block text-sm font-medium text-zinc-300">URL</label>
             <input
               type="url"
               value={frontmatter.url || ""}
               onChange={(e) => updateField("url", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">GitHub (user/repo)</label>
+            <label className="block text-sm font-medium text-zinc-300">GitHub (user/repo)</label>
             <input
               type="text"
               value={frontmatter.github || ""}
               onChange={(e) => updateField("github", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -220,9 +220,9 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
               id="featured"
               checked={frontmatter.featured || false}
               onChange={(e) => updateField("featured", e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-blue-600 focus:ring-blue-500"
             />
-            <label htmlFor="featured" className="text-sm font-medium text-gray-700">
+            <label htmlFor="featured" className="text-sm font-medium text-zinc-300">
               Featured
             </label>
           </div>
@@ -231,8 +231,8 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
 
       {/* Channel toggles (for articles) */}
       {isArticle && (
-        <div className="border-t pt-4">
-          <h3 className="mb-2 text-sm font-medium text-gray-700">Channels</h3>
+        <div className="border-t border-zinc-700 pt-4">
+          <h3 className="mb-2 text-sm font-medium text-zinc-300">Channels</h3>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <input
@@ -240,9 +240,9 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
                 id="blog-enabled"
                 checked={frontmatter.channels.blog.enabled}
                 onChange={(e) => updateChannel("blog", "enabled", e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-blue-600 focus:ring-blue-500"
               />
-              <label htmlFor="blog-enabled" className="text-sm text-gray-700">
+              <label htmlFor="blog-enabled" className="text-sm text-zinc-300">
                 Blog
               </label>
             </div>
@@ -252,9 +252,9 @@ export function FrontmatterEditor({ frontmatter, category, onChange }: Frontmatt
                 id="twitter-enabled"
                 checked={frontmatter.channels.twitter.enabled}
                 onChange={(e) => updateChannel("twitter", "enabled", e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-zinc-600 bg-zinc-800 text-blue-600 focus:ring-blue-500"
               />
-              <label htmlFor="twitter-enabled" className="text-sm text-gray-700">
+              <label htmlFor="twitter-enabled" className="text-sm text-zinc-300">
                 Twitter
               </label>
             </div>

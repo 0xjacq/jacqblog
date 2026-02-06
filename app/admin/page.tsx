@@ -40,14 +40,14 @@ export default function AdminDashboard() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-gray-500">Loading articles...</div>
+        <div className="text-zinc-400">Loading articles...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="rounded-md bg-red-50 p-4 text-red-700">
+      <div className="rounded-md bg-red-900/20 p-4 text-red-400">
         {error}
       </div>
     );
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">Articles</h1>
+      <h1 className="mb-6 text-2xl font-bold text-zinc-100">Articles</h1>
       <ArticleList articles={articles} />
     </div>
   );

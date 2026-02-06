@@ -105,7 +105,7 @@ export default function NewArticlePage() {
   return (
     <div className="flex h-[calc(100vh-140px)] flex-col">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">New Article</h1>
+        <h1 className="text-2xl font-bold text-zinc-100">New Article</h1>
         <button
           onClick={handleSave}
           disabled={isSaving}
@@ -116,18 +116,18 @@ export default function NewArticlePage() {
       </div>
 
       {error && (
-        <div className="mb-4 rounded-md bg-red-50 p-3 text-red-700">
+        <div className="mb-4 rounded-md bg-red-900/20 p-3 text-red-400">
           {error}
         </div>
       )}
 
       <div className="mb-4 flex gap-4">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Category</label>
+          <label className="block text-sm font-medium text-zinc-300">Category</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as ContentCategory)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             {categories.map((cat) => (
               <option key={cat.value} value={cat.value}>
@@ -137,13 +137,13 @@ export default function NewArticlePage() {
           </select>
         </div>
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Slug</label>
+          <label className="block text-sm font-medium text-zinc-300">Slug</label>
           <input
             type="text"
             value={slug}
             onChange={(e) => handleSlugChange(e.target.value)}
             placeholder="auto-generated-from-title"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
       </div>
@@ -151,14 +151,14 @@ export default function NewArticlePage() {
       <div className="grid flex-1 grid-cols-2 gap-4 overflow-hidden">
         {/* Left side: Form + Editor */}
         <div className="flex flex-col gap-4 overflow-hidden">
-          <div className="overflow-auto rounded-lg border border-gray-200 bg-white p-4">
+          <div className="overflow-auto rounded-lg border border-zinc-800 bg-zinc-900 p-4">
             <FrontmatterEditor
               frontmatter={frontmatter}
               category={category}
               onChange={handleFrontmatterChange}
             />
           </div>
-          <div className="min-h-[400px] flex-1 overflow-hidden rounded-lg border border-gray-200">
+          <div className="min-h-[400px] flex-1 overflow-hidden rounded-lg border border-zinc-800">
             <ArticleEditor
               content={content}
               onChange={setContent}
@@ -169,7 +169,7 @@ export default function NewArticlePage() {
         </div>
 
         {/* Right side: Preview */}
-        <div className="overflow-hidden rounded-lg border border-gray-200">
+        <div className="overflow-hidden rounded-lg border border-zinc-800">
           <MDXPreview content={content} />
         </div>
       </div>

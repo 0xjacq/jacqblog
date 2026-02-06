@@ -53,13 +53,13 @@ export function ArticleList({ articles }: ArticleListProps) {
           placeholder="Search articles..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 min-w-[200px] rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="flex-1 min-w-[200px] rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
 
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value as ContentCategory | "all")}
-          className="rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           <option value="all">All Categories</option>
           {Object.entries(categoryLabels).map(([key, label]) => (
@@ -72,7 +72,7 @@ export function ArticleList({ articles }: ArticleListProps) {
         <select
           value={publishedFilter}
           onChange={(e) => setPublishedFilter(e.target.value as "all" | "published" | "draft")}
-          className="rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           <option value="all">All Status</option>
           <option value="published">Published</option>
@@ -88,55 +88,55 @@ export function ArticleList({ articles }: ArticleListProps) {
       </div>
 
       {/* Article count */}
-      <div className="text-sm text-gray-600">
+      <div className="text-sm text-zinc-400">
         {filteredArticles.length} article{filteredArticles.length !== 1 ? "s" : ""}
       </div>
 
       {/* Article table */}
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto rounded-lg border border-zinc-800">
+        <table className="min-w-full divide-y divide-zinc-800">
+          <thead className="bg-zinc-900">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400">
                 Title
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400">
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400">
                 Status
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody className="divide-y divide-zinc-800 bg-zinc-900">
             {filteredArticles.map((article) => (
               <tr
                 key={`${article.category}-${article.slug}`}
-                className="hover:bg-gray-50"
+                className="hover:bg-zinc-800"
               >
                 <td className="px-6 py-4">
                   <Link
                     href={`/admin/edit/${article.category}/${article.slug}`}
-                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                    className="text-blue-400 hover:text-blue-300 hover:underline"
                   >
                     {article.title}
                   </Link>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-zinc-400">
                   {categoryLabels[article.category]}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-zinc-400">
                   {article.date || "—"}
                 </td>
                 <td className="px-6 py-4">
                   <span
                     className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                       article.published
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
+                        ? "bg-green-900/30 text-green-400"
+                        : "bg-yellow-900/30 text-yellow-400"
                     }`}
                   >
                     {article.published ? "Published" : "Draft"}
@@ -147,7 +147,7 @@ export function ArticleList({ articles }: ArticleListProps) {
 
             {filteredArticles.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={4} className="px-6 py-8 text-center text-zinc-500">
                   No articles found
                 </td>
               </tr>
