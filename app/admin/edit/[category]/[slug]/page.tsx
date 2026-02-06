@@ -169,8 +169,13 @@ export default function EditArticlePage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {isDirty && (
+            <span className="rounded bg-yellow-500/20 px-2 py-1 text-xs font-medium text-yellow-400">
+              Unsaved changes
+            </span>
+          )}
           {successMessage && (
-            <span className="text-sm text-green-600">{successMessage}</span>
+            <span className="text-sm text-green-400">{successMessage}</span>
           )}
           <button
             onClick={handleDelete}
@@ -181,7 +186,7 @@ export default function EditArticlePage() {
           </button>
           <button
             onClick={handleSave}
-            disabled={isSaving || !isDirty}
+            disabled={isSaving}
             className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
           >
             {isSaving ? "Saving..." : "Save"}
@@ -210,7 +215,6 @@ export default function EditArticlePage() {
               content={content}
               onChange={setContent}
               onSave={handleSave}
-              isDirty={isDirty}
             />
           </div>
         </div>

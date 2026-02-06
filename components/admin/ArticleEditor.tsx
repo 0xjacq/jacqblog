@@ -12,10 +12,9 @@ interface ArticleEditorProps {
   content: string;
   onChange: (content: string) => void;
   onSave: () => void;
-  isDirty: boolean;
 }
 
-export function ArticleEditor({ content, onChange, onSave, isDirty }: ArticleEditorProps) {
+export function ArticleEditor({ content, onChange, onSave }: ArticleEditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
@@ -122,12 +121,7 @@ export function ArticleEditor({ content, onChange, onSave, isDirty }: ArticleEdi
   }, [content, syncContent]);
 
   return (
-    <div className="relative h-full min-h-[400px] bg-[#282c34]">
-      {isDirty && (
-        <div className="absolute right-2 top-2 z-10 rounded bg-yellow-500 px-2 py-1 text-xs font-medium text-white">
-          Unsaved changes
-        </div>
-      )}
+    <div className="admin-editor relative h-full min-h-[400px] bg-[#282c34]">
       <div
         key={content ? "loaded" : "empty"}
         ref={containerRef}

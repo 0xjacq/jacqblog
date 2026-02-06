@@ -163,7 +163,6 @@ export default function NewArticlePage() {
               content={content}
               onChange={setContent}
               onSave={handleSave}
-              isDirty={content.length > 0}
             />
           </div>
         </div>
