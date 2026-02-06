@@ -10,6 +10,12 @@ import {
   validateFrontmatter,
   isValidPath,
 } from "@/lib/admin/validator";
+import {
+  shouldUseGitHubAPI,
+  createOrUpdateFile,
+  deleteFile,
+  fileExists,
+} from "@/lib/github/client";
 
 const contentDirectory = path.join(process.cwd(), "content");
 
@@ -83,22 +89,45 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ errors: frontmatterValidation.errors }, { status: 400 });
     }
 
-    // Check if file exists
-    const dir = path.join(contentDirectory, categoryDirs[category as ContentCategory]);
-    const filePath = path.join(dir, `${slug}.mdx`);
-
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: "Article not found" }, { status: 404 });
-    }
-
-    // Update the MDX file
+    const categoryDir = categoryDirs[category as ContentCategory];
+    const filePath = `content/${categoryDir}/${slug}.mdx`;
     const fileContent = matter.stringify(content || "", frontmatter);
-    fs.writeFileSync(filePath, fileContent, "utf-8");
 
-    return NextResponse.json({
-      success: true,
-      article: { category, slug },
-    });
+    // Use GitHub API in production, filesystem locally
+    if (shouldUseGitHubAPI()) {
+      // Check if file exists via GitHub
+      const exists = await fileExists(filePath);
+      if (!exists) {
+        return NextResponse.json({ error: "Article not found" }, { status: 404 });
+      }
+
+      await createOrUpdateFile(
+        filePath,
+        fileContent,
+        `Update ${category}/${slug}`
+      );
+
+      return NextResponse.json({
+        success: true,
+        article: { category, slug },
+        message: "Changes committed to GitHub. Deployment will start shortly.",
+        deploying: true,
+      });
+    } else {
+      // Local filesystem write
+      const localPath = path.join(contentDirectory, categoryDir, `${slug}.mdx`);
+
+      if (!fs.existsSync(localPath)) {
+        return NextResponse.json({ error: "Article not found" }, { status: 404 });
+      }
+
+      fs.writeFileSync(localPath, fileContent, "utf-8");
+
+      return NextResponse.json({
+        success: true,
+        article: { category, slug },
+      });
+    }
   } catch (err) {
     console.error("API Error:", err);
     return NextResponse.json({
@@ -127,16 +156,40 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ errors: ["Invalid path"] }, { status: 400 });
   }
 
-  // Check if file exists
-  const dir = path.join(contentDirectory, categoryDirs[category as ContentCategory]);
-  const filePath = path.join(dir, `${slug}.mdx`);
+  const categoryDir = categoryDirs[category as ContentCategory];
+  const filePath = `content/${categoryDir}/${slug}.mdx`;
 
-  if (!fs.existsSync(filePath)) {
-    return NextResponse.json({ error: "Article not found" }, { status: 404 });
+  try {
+    if (shouldUseGitHubAPI()) {
+      // Check if file exists via GitHub
+      const exists = await fileExists(filePath);
+      if (!exists) {
+        return NextResponse.json({ error: "Article not found" }, { status: 404 });
+      }
+
+      await deleteFile(filePath, `Delete ${category}/${slug}`);
+
+      return NextResponse.json({
+        success: true,
+        message: "Article deleted. Deployment will start shortly.",
+        deploying: true,
+      });
+    } else {
+      // Local filesystem delete
+      const localPath = path.join(contentDirectory, categoryDir, `${slug}.mdx`);
+
+      if (!fs.existsSync(localPath)) {
+        return NextResponse.json({ error: "Article not found" }, { status: 404 });
+      }
+
+      fs.unlinkSync(localPath);
+
+      return NextResponse.json({ success: true });
+    }
+  } catch (err) {
+    console.error("API Error:", err);
+    return NextResponse.json({
+      error: err instanceof Error ? err.message : "Failed to delete"
+    }, { status: 400 });
   }
-
-  // Delete the file
-  fs.unlinkSync(filePath);
-
-  return NextResponse.json({ success: true });
 }

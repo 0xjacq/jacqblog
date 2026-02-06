@@ -11,6 +11,11 @@ import {
   validateFrontmatter,
   isValidPath,
 } from "@/lib/admin/validator";
+import {
+  shouldUseGitHubAPI,
+  createOrUpdateFile,
+  fileExists,
+} from "@/lib/github/client";
 
 const contentDirectory = path.join(process.cwd(), "content");
 
@@ -101,31 +106,60 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ errors: frontmatterValidation.errors }, { status: 400 });
     }
 
-    // Check if file already exists
-    const dir = path.join(contentDirectory, categoryDirs[category as ContentCategory]);
-    const filePath = path.join(dir, `${slug}.mdx`);
-
-    if (fs.existsSync(filePath)) {
-      return NextResponse.json(
-        { errors: ["An article with this slug already exists in this category"] },
-        { status: 409 }
-      );
-    }
-
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-
-    // Create the MDX file
+    const categoryDir = categoryDirs[category as ContentCategory];
+    const filePath = `content/${categoryDir}/${slug}.mdx`;
     const fileContent = matter.stringify(content || "", frontmatter);
-    fs.writeFileSync(filePath, fileContent, "utf-8");
 
+    if (shouldUseGitHubAPI()) {
+      // Check if file already exists via GitHub
+      const exists = await fileExists(filePath);
+      if (exists) {
+        return NextResponse.json(
+          { errors: ["An article with this slug already exists in this category"] },
+          { status: 409 }
+        );
+      }
+
+      await createOrUpdateFile(
+        filePath,
+        fileContent,
+        `Create ${category}/${slug}`
+      );
+
+      return NextResponse.json({
+        success: true,
+        article: { category, slug },
+        message: "Article created. Deployment will start shortly.",
+        deploying: true,
+      });
+    } else {
+      // Local filesystem write
+      const dir = path.join(contentDirectory, categoryDir);
+      const localPath = path.join(dir, `${slug}.mdx`);
+
+      if (fs.existsSync(localPath)) {
+        return NextResponse.json(
+          { errors: ["An article with this slug already exists in this category"] },
+          { status: 409 }
+        );
+      }
+
+      // Create directory if it doesn't exist
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+
+      fs.writeFileSync(localPath, fileContent, "utf-8");
+
+      return NextResponse.json({
+        success: true,
+        article: { category, slug },
+      });
+    }
+  } catch (err) {
+    console.error("API Error:", err);
     return NextResponse.json({
-      success: true,
-      article: { category, slug },
-    });
-  } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+      error: err instanceof Error ? err.message : "Invalid request"
+    }, { status: 400 });
   }
 }

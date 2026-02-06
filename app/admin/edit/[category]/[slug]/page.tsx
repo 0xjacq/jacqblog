@@ -105,10 +105,16 @@ export default function EditArticlePage() {
 
       setOriginalContent(content);
       setOriginalFrontmatter(frontmatter);
-      setSuccessMessage("Saved successfully");
 
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccessMessage(null), 3000);
+      // Show appropriate message based on whether GitHub API was used
+      if (data.deploying) {
+        setSuccessMessage("Committed to GitHub. Deploying...");
+        // Keep the message visible longer for deployment
+        setTimeout(() => setSuccessMessage(null), 10000);
+      } else {
+        setSuccessMessage("Saved successfully");
+        setTimeout(() => setSuccessMessage(null), 3000);
+      }
     } catch {
       setError("An error occurred");
     } finally {
