@@ -23,6 +23,8 @@ export function MDXPreview({ content }: MDXPreviewProps) {
         mdxOptions: {
           remarkPlugins: [remarkGfm],
         },
+        blockJS: true,
+        blockDangerousJS: true,
       });
       setMdxSource(result);
     } catch (err) {

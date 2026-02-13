@@ -61,6 +61,7 @@ export function MDXContent({ source }: MDXContentProps) {
           mdxOptions: {
             remarkPlugins: [remarkGfm],
           },
+          blockJS: true,
         }}
       />
     </div>
