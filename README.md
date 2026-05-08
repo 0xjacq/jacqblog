@@ -1,254 +1,121 @@
 # jacqblog
 
-A personal blog built with Next.js 16, React 19, and MDX. Features multi-channel publishing (blog + Twitter), thematic content categories, and a minimal dark theme.
+LLM-native publishing system for human-arbitrated writing.
 
 **Live site:** [jacqblog.vercel.app](https://jacqblog.vercel.app)
 
-## Features
+`jacqblog` is the content hub behind my public writing on AI, systems, neuroscience, security, music, and finance. The core idea is simple: models handle filtering, structuring, and drafting; the human keeps editorial judgment and the final call.
 
-- **MDX Content** — Write posts in Markdown with embedded React components
-- **Multi-channel Publishing** — Publish to blog and Twitter simultaneously
-- **7 Content Categories** — Articles, updates, projects, books, music, biohacking, security
-- **Twitter Threading** — Automatic conversion of articles to tweet threads
-- **Reading Time** — Automatic calculation for all posts
-- **RSS Feed** — Auto-generated at `/rss.xml`
-- **SEO Optimized** — Sitemap, meta tags, and Open Graph support
-- **Fast & Minimal** — Static generation with Tailwind CSS dark theme
+## Why This Exists
 
-## Tech Stack
+Most publishing systems assume the human does everything manually and the model is an accessory. This repo flips that model.
 
-| Category | Technology |
-|----------|------------|
-| Framework | Next.js 16 (App Router) |
-| UI | React 19 |
-| Styling | Tailwind CSS 4 |
-| Content | MDX via next-mdx-remote |
-| Language | TypeScript |
-| Fonts | Geist & Geist Mono |
-| Deployment | Vercel |
+It treats LLMs as an informational pre-cortex:
+- they compress research into workable proposals
+- they help turn raw notes into reusable content
+- they make multi-channel publishing operational
 
-## Project Structure
+The job of the human is not to type more. It is to arbitrate better.
 
-```
-jacqblog/
-├── app/                    # Next.js App Router pages
-│   ├── articles/           # Blog articles
-│   ├── updates/            # Micro-posts
-│   ├── projects/           # Project showcase
-│   ├── books/              # Reading notes
-│   ├── music/              # Bass guitar, gear, theory
-│   ├── biohacking/         # Quantified self, experiments
-│   ├── security/           # CTF, pentesting, research
-│   ├── about/              # About page
-│   ├── api/                # API routes
-│   │   ├── publish/twitter # Twitter publishing API
-│   │   └── tweet/          # Standalone tweet API
-│   ├── rss.xml/            # RSS feed
-│   └── layout.tsx          # Root layout
-├── components/             # React components
-│   ├── ArticleCard.tsx
-│   ├── UpdateCard.tsx
-│   ├── ContentCard.tsx     # Generic card for thematic categories
-│   ├── ChannelBadge.tsx    # Blog/Twitter badges
-│   ├── Header.tsx
-│   ├── Footer.tsx
-│   └── MDXComponents.tsx
-├── content/                # MDX content files
-│   ├── articles/           # Long-form posts
-│   ├── updates/            # Micro-posts
-│   ├── projects/           # Project showcases
-│   ├── books/              # Reading notes
-│   ├── music/              # Music content
-│   ├── biohacking/         # Biohacking content
-│   ├── security/           # Security content
-│   └── drafts/             # Unpublished work
-└── lib/                    # Utilities
-    ├── config.ts           # Site configuration
-    ├── mdx.ts              # Content loading functions
-    ├── content/            # Content loader and types
-    └── channels/           # Multi-channel publishing
+## What It Does
+
+- MDX-based long-form publishing across multiple thematic sections
+- Unified content model with `published` and channel-level visibility
+- Multi-channel frontmatter for blog and Twitter/X distribution
+- Static content pages, RSS, sitemap, and category archives
+- Lightweight admin flows for creating and editing content in production
+
+## Publishing Model
+
+All content lives under `content/` and is organized by category:
+
+- `ai`
+- `finance`
+- `music`
+- `biohacking`
+- `security`
+- `ideas`
+- `projects`
+- `books`
+- `drafts`
+
+Visibility is controlled in frontmatter:
+
+```yaml
+---
+title: "The Gain Stage: How LLMs Amplify Your Thinking"
+date: "2026-01-31"
+description: "When you're wired into an LLM, it acts as a cognitive amplifier."
+tags: ["ai", "cognition"]
+published: true
+contentType: deep-dive
+channels:
+  blog:
+    enabled: true
+    format: "full"
+  twitter:
+    enabled: false
+---
 ```
 
-## Getting Started
+`published: false` keeps the piece in the repo but removes it from the public site. `channels` lets a piece exist on the blog, on Twitter/X, or both.
 
-### Prerequisites
+## Architecture Snapshot
 
-- Node.js 18+
-- npm, yarn, pnpm, or bun
+```text
+app/
+  Next.js 16 App Router pages, category indexes, post routes, RSS, admin routes
 
-### Installation
+content/
+  MDX source of truth for published and draft content
+
+lib/content/
+  Typed content loader, category mapping, filtering, and channel visibility
+
+lib/mdx.ts
+  Backward-compatible content access helpers used by routes and UI
+```
+
+Core stack:
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- MDX with `gray-matter`
+- Vercel for deployment
+
+## Local Development
 
 ```bash
-git clone https://github.com/jacq/jacqblog.git
-cd jacqblog
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the site.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Content Management
-
-### Writing Content
-
-Create a `.mdx` file in the appropriate `content/` subdirectory:
-
-```yaml
----
-title: "Your Title"
-date: "2026-01-21"
-description: "A brief description for SEO"
-contentType: "tutorial"
-tags: ["tag1", "tag2"]
-published: true
-channels:
-  blog:
-    enabled: true
-  twitter:
-    enabled: false
----
-
-Your markdown content here...
-```
-
-### Content Types
-
-| Type | Directory | Description |
-|------|-----------|-------------|
-| Articles | `content/articles/` | Long-form blog posts |
-| Updates | `content/updates/` | Short micro-posts (contentType required) |
-| Projects | `content/projects/` | Project showcases with links |
-| Books | `content/books/` | Reading notes with ratings |
-| Music | `content/music/` | Bass guitar, gear, music theory |
-| Biohacking | `content/biohacking/` | Quantified self, experiments |
-| Security | `content/security/` | CTF writeups, pentesting, tools |
-
-### Content Type Values
-
-- `tutorial` — Step-by-step instructional content
-- `deep-dive` — In-depth technical analysis
-- `case-study` — Real-world problem-solving
-- `announcement` — News and releases
-- `build-in-public` — Development progress
-- `quick-tip` — Brief, actionable advice
-- `project-showcase` — Project demonstrations
-
-### Frontmatter Reference
-
-**Articles & Thematic Categories:**
-```yaml
-title: "Title"                    # Required
-date: "YYYY-MM-DD"                # Required
-description: "SEO description"    # Required
-contentType: tutorial             # Optional
-tags: ["tag1", "tag2"]
-published: true
-channels:
-  blog: { enabled: true, format: "full" }
-  twitter: { enabled: false }
-```
-
-**Updates:**
-```yaml
-title: "Title"
-date: "YYYY-MM-DD"
-description: "Description"
-contentType: tutorial             # Required for updates
-tags: ["tag1"]
-published: true
-```
-
-**Projects:**
-```yaml
-title: "Project Name"
-description: "What it does"
-url: "https://..."                # Optional
-github: "user/repo"               # Optional
-tags: ["tech1", "tech2"]
-featured: true                    # Featured projects appear first
-```
-
-**Books:**
-```yaml
-title: "Book Title"
-author: "Author Name"
-rating: 4                         # 1-5
-dateRead: "YYYY-MM-DD"
-cover: "/images/..."              # Optional
-```
-
-## Multi-Channel Publishing
-
-### Channel System
-
-Content can be published to multiple channels:
-
-- **Blog** — Primary web publication
-- **Twitter** — Automatic thread generation
-
-Configure in frontmatter:
-```yaml
-channels:
-  blog:
-    enabled: true
-    format: "full"                # full or micro
-  twitter:
-    enabled: true
-    format: "thread"              # single or thread
-    customText: "..."             # Optional custom intro
-```
-
-### Twitter Publishing API
-
-**Publish content as a Twitter thread:**
-```bash
-curl -X POST http://localhost:3000/api/publish/twitter \
-  -H "Content-Type: application/json" \
-  -d '{"slug": "my-article", "category": "article", "format": "thread"}'
-```
-
-The API will:
-1. Convert MDX to Twitter-friendly text
-2. Split into 280-char segments
-3. Post as a thread with reply chains
-4. Update frontmatter with tweet ID
-
-**Environment variables required:**
-```env
-TWITTER_API_KEY=xxx
-TWITTER_API_SECRET=xxx
-TWITTER_ACCESS_TOKEN=xxx
-TWITTER_ACCESS_SECRET=xxx
-```
-
-## Scripts
+Useful commands:
 
 ```bash
-npm run dev      # Start development server
-npm run build    # Build for production
-npm run start    # Start production server
-npm run lint     # Run ESLint
+npm run dev
+npm run build
+npm run lint
 ```
 
 ## Deployment
 
-Deploy to Vercel:
+Production deploys run on Vercel:
 
 ```bash
 vercel --prod --token=$(grep VERCEL_TOKEN .env.local | cut -d '=' -f2)
 ```
 
-Or connect the repository to Vercel for automatic deployments.
+If you use the Twitter/X publishing flow, the app also expects the relevant API credentials in `.env.local`.
 
-### Environment Variables
+## Notes
 
-| Variable | Description |
-|----------|-------------|
-| `VERCEL_TOKEN` | Vercel deployment token |
-| `TWITTER_API_KEY` | Twitter API key |
-| `TWITTER_API_SECRET` | Twitter API secret |
-| `TWITTER_ACCESS_TOKEN` | Twitter access token |
-| `TWITTER_ACCESS_SECRET` | Twitter access secret |
+- The public site is intentionally opinionated and content-first.
+- The repo is not just a blog theme; it is a publishing workflow shaped around LLM collaboration.
+- `README-PROFILE.md` in this repo mirrors the intended GitHub profile README copy.
 
 ## License
 
