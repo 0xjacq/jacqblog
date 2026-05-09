@@ -24,6 +24,18 @@ Autonomous VPS deployment CLI for provisioning servers, Docker, Nginx, and SSL t
 **[Yt2txt](https://github.com/0xjacq/Yt2txt)**  
 GPU-accelerated YouTube transcription pipeline built on Faster Whisper and PyTorch.
 
+**[Agenpedia](https://github.com/0xjacq/Agenpedia)**  
+Markdown-first, harness-agnostic knowledge-base template for agent-driven ingestion, synthesis, and wiki workflows.
+
+**[skills](https://github.com/0xjacq/skills)**  
+Open collection of reusable agent skills built on the `npx skills` standard for Claude Code, Gemini CLI, OpenCode, Kilo, Pi, and Codex.
+
+**[kilo-mlx-bridge](https://github.com/0xjacq/kilo-mlx-bridge)**  
+Lightweight bridge that lets Kilo Code run local MLX models on Apple Silicon by proxying model identity and unsupported parameters.
+
+**[opencode-go-reverse-proxy](https://github.com/0xjacq/opencode-go-reverse-proxy)**  
+Reverse proxy that routes Claude Code and other coding agents through Opencode Go with model-aware routing and protocol translation.
+
 ## Writing
 
 - [Stop Learning Claude Code, NOW](https://jacqblog.vercel.app/ai/stop-learning-claude-code)
