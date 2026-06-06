@@ -21,6 +21,8 @@ export interface FrontmatterData {
   url?: string;
   github?: string;
   featured?: boolean;
+  showcase?: boolean;
+  showcaseOrder?: number;
 }
 
 interface FrontmatterEditorProps {

@@ -53,6 +53,8 @@ export interface ProjectFrontmatter {
   github?: string;
   tags: string[];
   featured: boolean;
+  showcase: boolean;
+  showcaseOrder: number;
   contentType?: ContentType;
   channels?: ChannelsConfig;
 }

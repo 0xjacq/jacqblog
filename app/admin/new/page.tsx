@@ -29,6 +29,8 @@ const defaultFrontmatter: FrontmatterData = {
     blog: { enabled: true },
     twitter: { enabled: false },
   },
+  showcase: false,
+  showcaseOrder: 999,
 };
 
 function generateSlug(title: string): string {

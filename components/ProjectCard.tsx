@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Project } from "@/lib/mdx";
+import { normalizeGitHubUrl } from "@/lib/utils";
 
 interface ProjectCardProps {
   project: Project;
@@ -40,6 +41,8 @@ function GitHubIcon() {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const githubUrl = normalizeGitHubUrl(project.frontmatter.github);
+
   return (
     <article className="group rounded-lg border border-border p-6 transition-colors hover:border-muted">
       <div className="flex flex-col gap-3">
@@ -50,9 +53,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </h2>
           </Link>
           <div className="flex items-center gap-2">
-            {project.frontmatter.github && (
+            {githubUrl && (
               <a
-                href={project.frontmatter.github}
+                href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted transition-colors hover:text-foreground"

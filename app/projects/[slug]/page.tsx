@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getProject, getProjects } from "@/lib/mdx";
 import { MDXContent } from "@/components/MDXComponents";
+import { getGitHubRepoRef, normalizeGitHubUrl } from "@/lib/utils";
 import type { Metadata } from "next";
 
 interface ProjectPageProps {
@@ -74,31 +75,30 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   // If content is thin (< 300 chars) and has a GitHub link, interpret it as a stub
   // and fetch the README from GitHub to display instead.
-  if (project.content.length < 300 && project.frontmatter.github) {
+  const githubRepoRef = getGitHubRepoRef(project.frontmatter.github);
+  const githubUrl = normalizeGitHubUrl(project.frontmatter.github);
+
+  if (project.content.length < 300 && githubRepoRef) {
     try {
-      // Extract owner/repo from github URL (e.g. "https://github.com/owner/repo")
-      const match = project.frontmatter.github.match(/github\.com\/([^/]+)\/([^/]+)/);
-      if (match) {
-        const [, owner, repo] = match;
-        // Try 'main' branch first
-        let readmeUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/README.md`;
-        let res = await fetch(readmeUrl);
+      const { owner, repo } = githubRepoRef;
+      // Try 'main' branch first
+      let readmeUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/README.md`;
+      let res = await fetch(readmeUrl);
 
-        // Fallback to 'master' if main fails
-        if (!res.ok) {
-          readmeUrl = `https://raw.githubusercontent.com/${owner}/${repo}/master/README.md`;
-          res = await fetch(readmeUrl);
-        }
+      // Fallback to 'master' if main fails
+      if (!res.ok) {
+        readmeUrl = `https://raw.githubusercontent.com/${owner}/${repo}/master/README.md`;
+        res = await fetch(readmeUrl);
+      }
 
-        if (res.ok) {
-          const readmeContent = await res.text();
-          // Replace the project content with the fetched README
-          // We keep the frontmatter from local file so metadata/title stays controlled
-          project = {
-            ...project,
-            content: readmeContent
-          };
-        }
+      if (res.ok) {
+        const readmeContent = await res.text();
+        // Replace the project content with the fetched README
+        // We keep the frontmatter from local file so metadata/title stays controlled
+        project = {
+          ...project,
+          content: readmeContent,
+        };
       }
     } catch (e) {
       console.error(`Failed to fetch README for ${slug}`, e);
@@ -136,9 +136,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <span>Visit Project</span>
               </a>
             )}
-            {project.frontmatter.github && (
+            {githubUrl && (
               <a
-                href={project.frontmatter.github}
+                href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-accent hover:underline"

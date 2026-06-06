@@ -18,6 +18,8 @@ const defaultFrontmatter: FrontmatterData = {
     blog: { enabled: true },
     twitter: { enabled: false },
   },
+  showcase: false,
+  showcaseOrder: 999,
 };
 
 export default function EditArticlePage() {
@@ -68,6 +70,8 @@ export default function EditArticlePage() {
           url: data.frontmatter.url,
           github: data.frontmatter.github,
           featured: data.frontmatter.featured,
+          showcase: data.frontmatter.showcase,
+          showcaseOrder: data.frontmatter.showcaseOrder,
         };
 
         setFrontmatter(fm);

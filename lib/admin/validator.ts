@@ -66,6 +66,8 @@ export interface FrontmatterInput {
   url?: string;
   github?: string;
   featured?: boolean;
+  showcase?: boolean;
+  showcaseOrder?: number;
 }
 
 export function validateFrontmatter(

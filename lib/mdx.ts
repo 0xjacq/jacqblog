@@ -31,6 +31,8 @@ export interface ProjectFrontmatter {
   github?: string;
   tags: string[];
   featured: boolean;
+  showcase: boolean;
+  showcaseOrder: number;
 }
 
 export interface Project {
@@ -117,6 +119,12 @@ export function getProjects(): Project[] {
     if (!a.frontmatter.featured && b.frontmatter.featured) return 1;
     return 0;
   });
+}
+
+export function getShowcaseProjects(): Project[] {
+  return getProjects()
+    .filter((project) => project.frontmatter.showcase)
+    .sort((a, b) => a.frontmatter.showcaseOrder - b.frontmatter.showcaseOrder);
 }
 
 export function getProject(slug: string): Project | undefined {

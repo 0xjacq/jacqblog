@@ -1,11 +1,9 @@
 import { siteConfig } from "@/lib/config";
-import { NewsletterForm } from "@/components/NewsletterForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "The philosophy behind this blog: LLMs as an informational pre-cortex, human-in-the-loop, and the duty to republish signal.",
+  description: "The thesis behind this blog and where to connect.",
 };
 
 export default function AboutPage() {
@@ -30,78 +28,6 @@ export default function AboutPage() {
           It&apos;s a duty: enriching the informational nexus rather than polluting it.
         </p>
 
-        <h2>The Informational Pre-Cortex</h2>
-        <p>
-          LLMs act as a processing layer that precedes my consciousness.
-          They filter, structure, and prioritize information before it reaches
-          my attention.
-        </p>
-        <p>
-          The living being—me—thus accesses a reality already made operational.
-          It&apos;s no longer a chaotic ocean of data to explore, but an organized
-          flow of proposals to arbitrate.
-        </p>
-        <p>
-          From a noisy space to a <strong>high signal-to-noise infrastructure</strong>,
-          traversed by routers (LLMs) and effectors (tools, skills).
-        </p>
-
-        <h2>The Cognitive Shift</h2>
-        <p>The paradigm has changed:</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Before</th>
-              <th>Now</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Search → Understand → Decide</td>
-              <td>Formulate → Receive → Act</td>
-            </tr>
-          </tbody>
-        </table>
-        <p>
-          The effort shifts. We no longer search for information—we
-          <strong> formulate</strong> what we want, we <strong>receive</strong>{" "}
-          proposals, and we <strong>act</strong> by arbitrating.
-        </p>
-        <p>
-          The critical skill becomes the ability to formulate intentions well
-          and exercise judgment on outputs.
-        </p>
-
-        <h2>Human-in-the-Loop</h2>
-        <p>
-          I am an <strong>Agent Manager</strong>.
-          But above all: the human in the loop.
-        </p>
-        <p>
-          Human taste and judgment are irreplaceable. The model proposes, the
-          human disposes. Agency is augmented but <strong>mediated</strong>: I
-          retain sovereignty over ends, even if means are externalized.
-        </p>
-        <p>
-          It&apos;s not a delegation of will—it&apos;s an externalization of
-          informational filtering.
-        </p>
-
-        <h2>The Stakes</h2>
-        <p>
-          The risk is no longer information overload. That problem is solved by
-          LLMs.
-        </p>
-        <p>
-          The new challenge is the <strong>governance of filtering</strong>. Who
-          defines what is signal? By what criteria? For whose benefit?
-        </p>
-        <p>
-          This blog is an attempt at an answer: a human who keeps control over
-          filtering, who publishes their arbitrations, and who contributes to a
-          higher-quality web.
-        </p>
-
         <h2>Connect</h2>
         <p>
           Find me on{" "}
@@ -123,8 +49,6 @@ export default function AboutPage() {
           .
         </p>
       </div>
-
-      <NewsletterForm />
     </div>
   );
 }

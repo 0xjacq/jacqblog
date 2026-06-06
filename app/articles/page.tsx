@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ArticlesPage() {
   // Get all content from all categories, sorted by date (most recent first)
   const allPosts = getAllContent<BaseContentFrontmatter>(
-    ["ai", "finance", "security", "music", "biohacking", "idea", "project", "book"],
+    ["ai", "security", "music", "biohacking", "project"],
     { channel: "blog", published: true }
   );
 
