@@ -1,45 +1,45 @@
 # jacqblog
 
-LLM-native publishing system for human-arbitrated writing.
+LLM-native publishing system for human-arbitrated writing, curated project showcases, and multi-channel content distribution.
 
 **Live site:** [jacqblog.vercel.app](https://jacqblog.vercel.app)
 
-`jacqblog` is the content hub behind my public writing on AI, systems, neuroscience, security, music, and finance. The core idea is simple: models handle filtering, structuring, and drafting; the human keeps editorial judgment and the final call.
+`jacqblog` is the publishing system behind my public writing on AI, systems, biohacking, security, and music. Models handle filtering, structuring, drafting, and operational glue. The human keeps taste, judgment, and the final call.
 
 ## Why This Exists
 
-Most publishing systems assume the human does everything manually and the model is an accessory. This repo flips that model.
+Most publishing stacks treat LLMs as assistants bolted onto a manual workflow. This repo treats them as part of the workflow itself.
 
-It treats LLMs as an informational pre-cortex:
-- they compress research into workable proposals
-- they help turn raw notes into reusable content
-- they make multi-channel publishing operational
-
-The job of the human is not to type more. It is to arbitrate better.
+- Research gets compressed into workable drafts
+- Notes get turned into reusable content
+- Distribution becomes operational instead of ad hoc
+- The human arbitrates instead of typing everything by hand
 
 ## What It Does
 
-- MDX-based long-form publishing across multiple thematic sections
-- Unified content model with `published` and channel-level visibility
-- Multi-channel frontmatter for blog and Twitter/X distribution
-- Static content pages, RSS, sitemap, and category archives
+- MDX-based long-form publishing with typed content loaders
+- Channel-aware frontmatter for blog and Twitter/X workflows
+- Public category indexes, RSS, sitemap, and per-post routes
+- Curated `/projects` showcase synced with the GitHub profile README
 - Lightweight admin flows for creating and editing content in production
 
-## Publishing Model
+## Content Model
 
-All content lives under `content/` and is organized by category:
+All source content lives under `content/`:
 
 - `ai`
-- `finance`
 - `music`
 - `biohacking`
 - `security`
-- `ideas`
 - `projects`
+- `finance`
+- `ideas`
 - `books`
 - `drafts`
 
-Visibility is controlled in frontmatter:
+Public navigation is intentionally narrower than the repo. `finance`, `ideas`, and `books` are kept in the content model and remain directly routable, but they are hidden from primary discovery surfaces.
+
+### Article Frontmatter
 
 ```yaml
 ---
@@ -58,25 +58,42 @@ channels:
 ---
 ```
 
-`published: false` keeps the piece in the repo but removes it from the public site. `channels` lets a piece exist on the blog, on Twitter/X, or both.
+`published: false` keeps a piece in the repo while removing it from public blog surfaces. `channels` controls where it should appear.
+
+### Project Frontmatter
+
+```yaml
+---
+title: "Agenpedia"
+description: "Markdown-first wiki template for agent-driven ingestion, synthesis, and reusable knowledge workflows."
+github: "https://github.com/0xjacq/Agenpedia"
+tags: ["agents", "wiki", "knowledge-base", "markdown", "skills"]
+featured: false
+showcase: true
+showcaseOrder: 2
+---
+```
+
+`showcase` and `showcaseOrder` control whether a project appears on `/projects` and in the project sitemap entries. Projects can stay in the repo and keep their direct detail pages without being part of the public showcase.
 
 ## Architecture Snapshot
 
 ```text
 app/
-  Next.js 16 App Router pages, category indexes, post routes, RSS, admin routes
+  Next.js 16 App Router pages, category indexes, post routes, RSS, sitemap, admin routes
 
 content/
-  MDX source of truth for published and draft content
+  MDX source of truth for published, hidden, and draft content
 
 lib/content/
   Typed content loader, category mapping, filtering, and channel visibility
 
 lib/mdx.ts
-  Backward-compatible content access helpers used by routes and UI
+  Project helpers, showcase filtering, and backward-compatible route access
 ```
 
 Core stack:
+
 - Next.js 16
 - React 19
 - TypeScript
@@ -114,8 +131,8 @@ If you use the Twitter/X publishing flow, the app also expects the relevant API 
 ## Notes
 
 - The public site is intentionally opinionated and content-first.
-- The repo is not just a blog theme; it is a publishing workflow shaped around LLM collaboration.
-- `README-PROFILE.md` in this repo mirrors the intended GitHub profile README copy.
+- This repo is not just a blog theme; it is a publishing workflow shaped around LLM collaboration.
+- [`README-PROFILE.md`](./README-PROFILE.md) mirrors the intended GitHub profile README copy.
 
 ## License
 
